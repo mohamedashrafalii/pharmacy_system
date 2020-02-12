@@ -83,7 +83,7 @@ class Invoice extends Component {
 
     await axios
       .post(
-        'http://localhost:5000/api/receipts/create',
+        'https://pharamcy-system.herokuapp.com/api/receipts/create',
         { receipt: this.state.lineItems }
       )
       .then(res => {
@@ -95,7 +95,7 @@ class Invoice extends Component {
 
       this.setState({
         flag:
-          'http://localhost:5000/api/receipts/read/' +
+          'https://pharamcy-system.herokuapp.com/api/receipts/read/' +
           this.state.id +
           '/' +
           this.formatCurrency(this.calcGrandTotal()),
@@ -146,7 +146,7 @@ class Invoice extends Component {
 
   SendMail = async () => {
     const res = await axios.get(
-      'http://localhost:5000/api/receipts/read/' +
+      'https://pharamcy-system.herokuapp.com/api/receipts/read/' +
         this.state.id
     )
 
@@ -186,7 +186,8 @@ class Invoice extends Component {
       '\n'
 
     axios
-      .post('http://localhost:5000/api/receipts/sendMail', {
+      .post('https://pharamcy-system.herokuapp.com/
+            api/receipts/sendMail', {
         mail: this.state.mail,
         mailBody: mailBody
       })
