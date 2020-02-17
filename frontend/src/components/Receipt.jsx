@@ -12,13 +12,13 @@ class Receipt extends Component {
 
   getRecipt = async ()=>{
     const res = await  axios.get(
-      "https://pharamcy-system.herokuapp.com/api/receipts/read/"+ this.props.match.params.id
+      "http://localhost:5000/api/receipts/read/"+ this.props.match.params.id
     )
     this.setState({rec:res.data.data});
 
   }
 
-    render() {
+    render=()=> {
       this.getRecipt()
 
        let price = this.props.match.params.price

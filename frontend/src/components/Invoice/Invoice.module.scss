@@ -8,7 +8,10 @@
   border-radius: $borderRadius;
   background: $bgColor;
 }
-
+.barcodeNumber
+{
+  width:34%;
+}
 .brand {
   margin-bottom: $rhythm * 2;
   .logo {

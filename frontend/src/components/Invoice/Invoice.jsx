@@ -3,7 +3,6 @@ import styles from './Invoice.module.scss'
 import axios from 'axios'
 import LineItems from './LineItems'
 import uuidv4 from 'uuid/v4'
-import { connection } from 'mongoose'
 
 var QRCode = require('qrcode.react')
 
@@ -14,6 +13,7 @@ class Invoice extends Component {
   currency = 'USD'
 
   state = {
+    medicineId:'',
     mail: '',
     flag: '',
     show: false,
@@ -21,13 +21,18 @@ class Invoice extends Component {
     qrCODE:null,
     id: '',
     discountRate: 0.0,
+    medicine:{  id: '', // react-beautiful-dnd unique key
+    name: '',
+    description: '',
+    price:''
+    },
     lineItems: [
       {
-        id: '1', // react-beautiful-dnd unique key
-        name: 'Potato',
-        description: 'Demo item',
-        quantity: 1,
-        price: 5.0
+        id: uuidv4(), // react-beautiful-dnd unique key
+        name: '',
+        description: '',
+        quantity: '',
+        price: ''
       }
     ]
   }
@@ -50,10 +55,10 @@ class Invoice extends Component {
       lineItems: this.state.lineItems.concat([
         {
           id: uuidv4(),
-          name: 'testing',
-          description: 'testing',
+          name: '',//this.setState.medicine.name,
+          description:'', //this.medicine.description,
           quantity: 1,
-          price: 15.0
+          price: ''//this.medicine.price
         }
       ])
     })
@@ -77,7 +82,15 @@ class Invoice extends Component {
     event.target.select()
   }
 
-
+  // handleScan = async () =>{
+  //   await axios
+  //   .get("http://localhost:5000/api/medicines/read/"+this.setState.medicineId)
+  //   .then(res=>{this.setState.medicine.name=res.data.name
+  //     this.setState.medicine.description=res.data.description
+  //    this.setState.medicine.price=res.data.price
+  //    this.setState.handleAddLineItem()
+  //   })
+  // }
 
   handlePayButtonClick = async event => {
 
@@ -95,7 +108,7 @@ class Invoice extends Component {
 
       this.setState({
         flag:
-          'http://localhost:5000/api/receipts/read/' +
+          'http://localhost:3000/api/receipts/read/' +
           this.state.id +
           '/' +
           this.formatCurrency(this.calcGrandTotal()),
@@ -210,6 +223,11 @@ class Invoice extends Component {
     } else this.state.qrCODE = null
     return (
       <div className={styles.invoice}>
+        {/* <div>
+          <h1>Bar Code Number</h1>
+          <input name="barCodeNumber" className={styles.barcodeNumber} ></input>
+          <button id="scan"  className={styles.newreceipt} onClick={this.handleScan}>Scan</button>
+        </div> */}
         <div className={styles.pay}>
           <button
             id="my-new-receipt"
