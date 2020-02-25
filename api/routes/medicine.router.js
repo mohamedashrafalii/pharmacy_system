@@ -6,7 +6,8 @@ const {
   Read,
   get_Allmedicines,
   update_medicine,
-  delete_medicine
+  delete_medicine,
+  ReadBarcode
 } = medicineController;
 
 router.post("/create", Create);
@@ -14,4 +15,5 @@ router.get("/read/:id", Read);
 router.get("/read",get_Allmedicines);
 router.put("/update/:id",update_medicine);
 router.delete("/delete/:id",delete_medicine);
+router.get("/readBarcode/:barcode",ReadBarcode);
 module.exports = router;

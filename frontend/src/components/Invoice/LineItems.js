@@ -89,9 +89,9 @@ class LineItems extends Component {
 
           </div>
 
-          <div className={styles.addItem}>
+          {/* <div className={styles.addItem}>
             <button type="button" onClick={addHandler}><AddIcon size="1.25em" className={styles.addIcon} /> Add Item</button>
-          </div>
+          </div> */}
 
         </div>
       </form>

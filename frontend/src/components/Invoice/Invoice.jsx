@@ -4,6 +4,7 @@ import axios from 'axios'
 import LineItems from './LineItems'
 import uuidv4 from 'uuid/v4'
 
+
 var QRCode = require('qrcode.react')
 
 class Invoice extends Component {
@@ -21,11 +22,14 @@ class Invoice extends Component {
     qrCODE:null,
     id: '',
     discountRate: 0.0,
-    medicine:{  id: '', // react-beautiful-dnd unique key
+     medicine:
+    {  id: '', // react-beautiful-dnd unique key
+    barcodeNumber:'',
     name: '',
     description: '',
     price:''
     },
+    barcodeNumber:'',
     lineItems: [
       {
         id: uuidv4(), // react-beautiful-dnd unique key
@@ -50,15 +54,17 @@ class Invoice extends Component {
   }
 
   handleAddLineItem = event => {
+
     this.setState({
       // use optimistic uuid for drag drop; in a production app this could be a database id
+
       lineItems: this.state.lineItems.concat([
         {
-          id: uuidv4(),
-          name: '',//this.setState.medicine.name,
-          description:'', //this.medicine.description,
+          id: this.state.medicine.id,
+          name: this.state.medicine.name,//this.setState.medicine.name,
+          description:this.state.medicine.description, //this.medicine.description,
           quantity: 1,
-          price: ''//this.medicine.price
+          price:this.state.medicine.price//this.medicine.price
         }
       ])
     })
@@ -81,16 +87,27 @@ class Invoice extends Component {
   handleFocusSelect = event => {
     event.target.select()
   }
+  getMedicineBYBarcode=async(barcodeNumber)=>
+  {
+    await axios
+      .get(
+        'http://localhost:5000/api/medicines/readBarcode/'+barcodeNumber
+      )
+      .then((res) => {
+        this.setState({medicine:{id:res.data.data[0]._id,name:res.data.data[0].name,price:res.data.data[0].price,description:res.data.data[0].description}})
+        this.handleAddLineItem()
+      })
+      .catch(error => {
+        alert("invalid barcode number")
+      })
 
-  // handleScan = async () =>{
-  //   await axios
-  //   .get("http://localhost:5000/api/medicines/read/"+this.setState.medicineId)
-  //   .then(res=>{this.setState.medicine.name=res.data.name
-  //     this.setState.medicine.description=res.data.description
-  //    this.setState.medicine.price=res.data.price
-  //    this.setState.handleAddLineItem()
-  //   })
-  // }
+  }
+
+  handleScan = async () =>{
+      this.getMedicineBYBarcode(this.state.barcodeNumber);
+
+  }
+
 
   handlePayButtonClick = async event => {
 
@@ -223,11 +240,13 @@ class Invoice extends Component {
     } else this.state.qrCODE = null
     return (
       <div className={styles.invoice}>
-        {/* <div>
+        <div>
           <h1>Bar Code Number</h1>
-          <input name="barCodeNumber" className={styles.barcodeNumber} ></input>
-          <button id="scan"  className={styles.newreceipt} onClick={this.handleScan}>Scan</button>
-        </div> */}
+          <input name="barCodeNumber" className={styles.barcodeNumber } value={this.state.barcodeNumber} onChange={(e) => {
+   this.setState({ barcodeNumber : e.target.value })
+ }} />
+          <button id="scan"  className={styles.newreceipt} onClick={()=>this.handleScan()}>Scan</button>
+        </div>
         <div className={styles.pay}>
           <button
             id="my-new-receipt"
@@ -238,6 +257,7 @@ class Invoice extends Component {
           </button>
         </div>
         <h2>Receipt</h2>
+
 
         <LineItems
           items={this.state.lineItems}

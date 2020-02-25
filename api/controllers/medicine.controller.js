@@ -33,6 +33,22 @@ const Read =async (req, res) => {
       });
     });
 };
+//get by barcode number
+const ReadBarcode =async (req, res) => {
+  const barcode = req.params.barcode
+  Medicine.find({barcodeNumber:barcode})
+  .then(foundMedicine => {
+    res.json({
+      msg: "This Medicine information",
+      data: foundMedicine
+    });
+  })
+  .catch(error => {
+    res.json({
+      err: error.message
+    });
+  });
+};
 //read all
 get_Allmedicines= async (req, res) => {
   const medicine = await Medicine.find()
@@ -78,6 +94,7 @@ module.exports = {
     Read,
     get_Allmedicines,
     update_medicine,
-    delete_medicine
+    delete_medicine,
+    ReadBarcode
   };
   
