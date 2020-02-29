@@ -8,7 +8,9 @@ const medicineSchema = new Schema(
     name:type=String,
     description:type=String,
     price:type=Number,
-    barcodeNumber:type=Number
+    barcodeNumber:type=Number,
+    activeIngredients:type=String,
+    date:type=String
 
   },
   {

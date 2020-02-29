@@ -1,21 +1,26 @@
 const Medicine = require("../../models/medicine.model");
-const nodemailer = require("nodemailer");
-
 //Create 
 const Create =async (req, res) => {
   const medicine = await Medicine.create(req.body)
+
   .then(createdMedicine => {
         res.json({
             msg:"Created successfully",
             id:createdMedicine._id,
             data:medicine
           });
-    })
+         
+    },
+    
+    )
     .catch(error => {
       res.json({
         err: error.message
       });
     });
+    
+   
+    //req.body={medicineName:}
 };
 
 //Read by id
@@ -24,7 +29,7 @@ const Read =async (req, res) => {
     .then(foundMedicine => {
       res.json({
         msg: "This Medicine information",
-        data: foundMedicine.medicine
+        data: foundMedicine
       });
     })
     .catch(error => {
@@ -51,12 +56,15 @@ const ReadBarcode =async (req, res) => {
 };
 //read all
 get_Allmedicines= async (req, res) => {
+  try{
   const medicine = await Medicine.find()
 
   if(medicine.length===0)
   res.json({msg : "empty"})
   else
   res.json({ data: medicine })
+}
+catch(error){res.json({err:error.message})}
 };
 
 

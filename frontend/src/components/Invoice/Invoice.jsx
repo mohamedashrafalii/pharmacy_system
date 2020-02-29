@@ -87,6 +87,17 @@ class Invoice extends Component {
   handleFocusSelect = event => {
     event.target.select()
   }
+  updateMedicineQuantity=async(body,name)=>
+  {
+    await axios
+    .put('http://localhost:5000/api/medicinesQuantity/'+name,body)
+    .then(
+
+    )
+      .catch(error => {
+        alert(error.message)
+      })
+  }
   getMedicineBYBarcode=async(barcodeNumber)=>
   {
     await axios
@@ -106,6 +117,7 @@ class Invoice extends Component {
   handleScan = async () =>{
       this.getMedicineBYBarcode(this.state.barcodeNumber);
 
+
   }
 
 
@@ -123,6 +135,61 @@ class Invoice extends Component {
         alert(error.message)
       })
 
+      //check quantities
+      let quantitiesChecker=true
+      let showInv=true;
+      for(let i=0;i<this.state.lineItems.length;i++)
+      {
+
+      let oldMedicine=""
+
+      let quantitytmp=this.state.lineItems[i].quantity;
+
+      await axios.get("http://localhost:5000/api/medicines/read/"+ this.state.lineItems[i].id)
+      .then((res)=>{oldMedicine=res.data.data})
+
+      await axios.get("http://localhost:5000/api/medicines/readBarcode/"+oldMedicine.barcodeNumber)
+      .then((res)=>{oldMedicine=res.data.data})
+
+      await axios.get('http://localhost:5000/api/medicinesQuantity/'+oldMedicine[0].name)
+      .then((res)=>{oldMedicine=res.data.data})
+
+        if(quantitytmp>oldMedicine[0].quantity)
+        {alert("no enough "+oldMedicine[0].medicineName+" there is only "+oldMedicine[0].quantity+" "+oldMedicine[0].medicineName)
+        showInv=false
+        quantitiesChecker=false
+        break
+        }
+
+  }
+  if(quantitiesChecker)
+  {
+    let showInv=true;
+  for(let i=0;i<this.state.lineItems.length;i++)
+  {
+
+  let oldMedicine=""
+
+  let quantitytmp=this.state.lineItems[i].quantity;
+
+  await axios.get("http://localhost:5000/api/medicines/read/"+ this.state.lineItems[i].id)
+  .then((res)=>{oldMedicine=res.data.data})
+    await axios.get("http://localhost:5000/api/medicines/readBarcode/"+oldMedicine.barcodeNumber)
+  .then((res)=>{oldMedicine=res.data.data})
+    await axios.get('http://localhost:5000/api/medicinesQuantity/'+oldMedicine[0].name)
+  .then((res)=>{oldMedicine=res.data.data})
+      if(quantitytmp>oldMedicine[0].quantity)
+    {alert("no enough "+oldMedicine[0].medicineName)
+    showInv=false
+    break
+    }
+    else{
+  const body={
+    quantity:oldMedicine[0].quantity-quantitytmp>=0?oldMedicine[0].quantity-quantitytmp:0}
+    this.updateMedicineQuantity(body,oldMedicine[0].medicineName)
+  }
+}
+  if(showInv){
       this.setState({
         flag:
           'http://localhost:3000/api/receipts/read/' +
@@ -131,7 +198,9 @@ class Invoice extends Component {
           this.formatCurrency(this.calcGrandTotal()),
         show: true
       })
+    }
   }
+}
 
   handleNewReceiptClick = event => {
     event.preventDefault()
@@ -232,7 +301,7 @@ class Invoice extends Component {
       mail: e.target.value
     })
   }
-
+componentDidMount=()=>{this.setState({lineItems:[]})}
   render = () => {
     // let qrCODE
     if (this.state.show) {
@@ -312,7 +381,7 @@ class Invoice extends Component {
         </div>
 
         <div className={styles.pay}>
-          <button className={styles.payNow} onClick={this.handlePayButtonClick}>
+          <button className={styles.payNow} onClick={()=>this.handlePayButtonClick()}>
             Pay Now
           </button>
         </div>
