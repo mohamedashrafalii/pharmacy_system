@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const receiptController = require("../controllers/receipt.controller");
+const verify = require("../controllers/verifyToken.controller")
+
 const {
   Create,
   Read,
@@ -8,8 +10,8 @@ const {
   ReadAll
 } = receiptController;
 
-router.post("/create", Create);
+router.post("/create",verify, Create);
 router.get("/read/:id", Read);
-router.post("/sendMail", SendMail);
-router.get("/read",ReadAll)
+router.post("/sendMail",verify, SendMail);
+router.get("/read",verify,ReadAll)
 module.exports = router;

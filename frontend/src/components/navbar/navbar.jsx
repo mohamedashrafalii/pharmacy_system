@@ -8,6 +8,8 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Medicines from '../medicine/medicine.jsx'
 import Invoice from '../Invoice/Invoice.jsx'
+
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -57,7 +59,9 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function NavTabs() {
+export default function NavTabs(props) {
+
+
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -66,6 +70,7 @@ export default function NavTabs() {
   };
 
   return (
+
     <div className={classes.root}>
       <AppBar position="static">
         <Tabs
@@ -79,10 +84,10 @@ export default function NavTabs() {
          </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-      <Medicines/>
+      <Medicines key="1" value={props.value}/>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <Invoice/>
+        <Invoice key="2" value={props.value}/>
       </TabPanel>
 
     </div>

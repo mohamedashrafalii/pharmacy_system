@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const medicineController = require("../controllers/medicine.controller");
+const verify = require("../controllers/verifyToken.controller")
 const {
   Create,
   Read,
@@ -10,10 +11,10 @@ const {
   ReadBarcode
 } = medicineController;
 
-router.post("/create", Create);
-router.get("/read/:id", Read);
-router.get("/read",get_Allmedicines);
-router.put("/update/:id",update_medicine);
-router.delete("/delete/:id",delete_medicine);
-router.get("/readBarcode/:barcode",ReadBarcode);
+router.post("/create",verify, Create);
+router.get("/read/:id",verify, Read);
+router.get("/read",verify,get_Allmedicines);
+router.put("/update/:id",verify,update_medicine);
+router.delete("/delete/:id",verify,delete_medicine);
+router.get("/readBarcode/:barcode",verify,ReadBarcode);
 module.exports = router;

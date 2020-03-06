@@ -57,8 +57,8 @@ const SendMail =async (req,res)=> {
  var transporter = nodemailer.createTransport({
    service: 'gmail',
    auth: {
-     user: 'yourreceipt7@gmail.com',
-     pass: 'receiptA1@'
+     user: process.env.USER,
+     pass: process.env.PASS
    }
  });
  

@@ -3,7 +3,8 @@ import styles from './Invoice.module.scss'
 import axios from 'axios'
 import LineItems from './LineItems'
 import uuidv4 from 'uuid/v4'
-
+import Navbar from '../navbar/navbar'
+import { Nav } from 'reactstrap'
 
 var QRCode = require('qrcode.react')
 
@@ -27,7 +28,8 @@ class Invoice extends Component {
     barcodeNumber:'',
     name: '',
     description: '',
-    price:''
+    price:'',
+    quantity:""
     },
     barcodeNumber:'',
     lineItems: [
@@ -87,22 +89,22 @@ class Invoice extends Component {
   handleFocusSelect = event => {
     event.target.select()
   }
-  updateMedicineQuantity=async(body,name)=>
-  {
-    await axios
-    .put('http://localhost:5000/api/medicinesQuantity/'+name,body)
-    .then(
+  // updateMedicineQuantity=async(body,name)=>
+  // {
+  //   await axios
+  //   .put('http://localhost:5000/api/medicinesQuantity/'+name,body,{headers: { authToken : this.props.value }})
+  //   .then(
 
-    )
-      .catch(error => {
-        alert(error.message)
-      })
-  }
+  //   )
+  //     .catch(error => {
+  //       alert(error.message)
+  //     })
+  // }
   getMedicineBYBarcode=async(barcodeNumber)=>
   {
     await axios
       .get(
-        'http://localhost:5000/api/medicines/readBarcode/'+barcodeNumber
+        'http://localhost:5000/api/medicines/readBarcode/'+barcodeNumber,{headers: { authToken : this.props.value }}
       )
       .then((res) => {
         this.setState({medicine:{id:res.data.data[0]._id,name:res.data.data[0].name,price:res.data.data[0].price,description:res.data.data[0].description}})
@@ -126,7 +128,7 @@ class Invoice extends Component {
     await axios
       .post(
         'http://localhost:5000/api/receipts/create',
-        { receipt: this.state.lineItems }
+        { receipt: this.state.lineItems },{headers: { authToken : this.props.value }}
       )
       .then(res => {
         this.setState({ id: res.data.id })
@@ -145,17 +147,11 @@ class Invoice extends Component {
 
       let quantitytmp=this.state.lineItems[i].quantity;
 
-      await axios.get("http://localhost:5000/api/medicines/read/"+ this.state.lineItems[i].id)
+      await axios.get("http://localhost:5000/api/medicines/read/"+ this.state.lineItems[i].id,{headers: { authToken : this.props.value }})
       .then((res)=>{oldMedicine=res.data.data})
 
-      await axios.get("http://localhost:5000/api/medicines/readBarcode/"+oldMedicine.barcodeNumber)
-      .then((res)=>{oldMedicine=res.data.data})
-
-      await axios.get('http://localhost:5000/api/medicinesQuantity/'+oldMedicine[0].name)
-      .then((res)=>{oldMedicine=res.data.data})
-
-        if(quantitytmp>oldMedicine[0].quantity)
-        {alert("no enough "+oldMedicine[0].medicineName+" there is only "+oldMedicine[0].quantity+" "+oldMedicine[0].medicineName)
+        if(quantitytmp>oldMedicine.quantity)
+        {alert("no enough "+oldMedicine.name+" there is only "+oldMedicine.quantity+" "+oldMedicine.name)
         showInv=false
         quantitiesChecker=false
         break
@@ -172,21 +168,21 @@ class Invoice extends Component {
 
   let quantitytmp=this.state.lineItems[i].quantity;
 
-  await axios.get("http://localhost:5000/api/medicines/read/"+ this.state.lineItems[i].id)
+  await axios.get("http://localhost:5000/api/medicines/read/"+ this.state.lineItems[i].id,{headers: { authToken : this.props.value }})
   .then((res)=>{oldMedicine=res.data.data})
-    await axios.get("http://localhost:5000/api/medicines/readBarcode/"+oldMedicine.barcodeNumber)
-  .then((res)=>{oldMedicine=res.data.data})
-    await axios.get('http://localhost:5000/api/medicinesQuantity/'+oldMedicine[0].name)
-  .then((res)=>{oldMedicine=res.data.data})
-      if(quantitytmp>oldMedicine[0].quantity)
-    {alert("no enough "+oldMedicine[0].medicineName)
+  //   await axios.get("http://localhost:5000/api/medicines/readBarcode/"+oldMedicine.barcodeNumber,{headers: { authToken : this.props.value }})
+  // .then((res)=>{oldMedicine=res.data.data})
+  //   await axios.get('http://localhost:5000/api/medicinesQuantity/'+oldMedicine[0].name,{headers: { authToken : this.props.value }})
+  // .then((res)=>{oldMedicine=res.data.data})
+      if(quantitytmp>oldMedicine.quantity)
+    {alert("no enough "+oldMedicine.name)
     showInv=false
     break
     }
     else{
   const body={
-    quantity:oldMedicine[0].quantity-quantitytmp>=0?oldMedicine[0].quantity-quantitytmp:0}
-    this.updateMedicineQuantity(body,oldMedicine[0].medicineName)
+    quantity:oldMedicine.quantity-quantitytmp>=0?oldMedicine.quantity-quantitytmp:0}
+    await axios.put("http://localhost:5000/api/medicines/update/"+ this.state.lineItems[i].id,body,{headers: { authToken : this.props.value }})
   }
 }
   if(showInv){
@@ -204,7 +200,26 @@ class Invoice extends Component {
 
   handleNewReceiptClick = event => {
     event.preventDefault()
-    window.location.reload()
+    this.setState({ medicineId:'',
+    mail: '',
+    flag: '',
+    show: false,
+    qr: '',
+    qrCODE:null,
+    id: '',
+    discountRate: 0.0,
+     medicine:
+    {  id: '', // react-beautiful-dnd unique key
+    barcodeNumber:'',
+    name: '',
+    description: '',
+    price:''
+    },
+    barcodeNumber:'',
+    lineItems: [
+
+    ]})
+    this.forceUpdate()
   }
 
   formatCurrency = amount => {
@@ -246,7 +261,7 @@ class Invoice extends Component {
   SendMail = async () => {
     const res = await axios.get(
       'http://localhost:5000/api/receipts/read/' +
-        this.state.id
+        this.state.id,{headers: { authToken : this.props.value }}
     )
 
     let mailBody = ''
@@ -288,7 +303,7 @@ class Invoice extends Component {
       .post('http://localhost:5000/api/receipts/sendMail', {
         mail: this.state.mail,
         mailBody: mailBody
-      })
+      },{headers: { authToken : this.props.value }})
       .then( alert('Sent'))
       .catch(error => {
         alert(error.message)
@@ -308,7 +323,9 @@ componentDidMount=()=>{this.setState({lineItems:[]})}
       this.state.qrCODE = <QRCode value={this.state.flag} />
     } else this.state.qrCODE = null
     return (
+
       <div className={styles.invoice}>
+
         <div>
           <h1>Bar Code Number</h1>
           <input name="barCodeNumber" className={styles.barcodeNumber } value={this.state.barcodeNumber} onChange={(e) => {
@@ -348,7 +365,7 @@ componentDidMount=()=>{this.setState({lineItems:[]})}
                     name="discountRate"
                     type="number"
                     step="0.01"
-                    value={this.state.discountxRate}
+                    value={this.state.discountRate}
                     onChange={this.handleInvoiceChange}
                     onFocus={this.handleFocusSelect}
                   />

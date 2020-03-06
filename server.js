@@ -4,10 +4,12 @@ const cors = require("cors");
 const path = require("path");
 const app = express();
 const config = require("./config/keys.js");
+const dotenv = require("dotenv")
 
+dotenv.config()
 // Connect to Mongo
 mongoose
-  .connect(config.mongoURI, {
+  .connect(process.env.DB_CONNECTION, {
     useNewUrlParser: true,
     useFindAndModify: false,
     useCreateIndex: true,
@@ -32,9 +34,11 @@ app.get("/", (req, res) => res.send(`<h1>Welcome to Beat the Receipt app</h1>`))
 // Use Routes
 
 
-app.use("/api/receipts", require("./api/routes/receipt.router"));
+app.use("/api/receipts",require("./api/routes/receipt.router"));
 app.use("/api/medicines",require("./api/routes/medicine.router"));
 app.use("/api/medicinesQuantity",require("./api/routes/quantity.router"));
+app.use("/api/auth",require("./api/routes/auth.router"));
+
 // Wrong path
 app.use((req, res) =>
   res.status(404).send(`<h1>Can not find what you're looking for</h1>`)

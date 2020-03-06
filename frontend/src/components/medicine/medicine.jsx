@@ -31,7 +31,8 @@ class Medicine extends Component {
         description: '',
         price: '',
         activeIngredients:'',
-        date:''
+        date:'',
+        quantity:""
       },
     newMedicine:{
       barcodeNumber:'',
@@ -39,7 +40,8 @@ class Medicine extends Component {
       description: '',
       price: '',
       activeIngredients:'',
-      date:''
+      date:'',
+      quantity:""
 
     },
     editMedicineData: {
@@ -49,7 +51,8 @@ class Medicine extends Component {
       description: '',
       price: '',
       activeIngredients:'',
-      date:''
+      date:'',
+      quantity:""
     },
     newMedicineModal: false,
     editMedicineModal:false
@@ -69,123 +72,127 @@ class Medicine extends Component {
   getMedicines = async  ()=> {
 
     const res = await axios.get(
-      "http://localhost:5000/api/medicines/read"
+      "http://localhost:5000/api/medicines/read",{headers: { authToken : this.props.value }}
       );
     this.setState({ medicines: res.data.data });
 
   };
   deleteMedicine=async(id)=> {
-    let oldMedicine=""
-    await axios.get("http://localhost:5000/api/medicines/read/"+ id)
-    .then((res)=>{oldMedicine=res.data.data})
-    let quantityOldMed=0
-    await axios.delete('http://localhost:5000/api/medicines/delete/' + id).then((response) => {
+    // let oldMedicine=""
+    // await axios.get("http://localhost:5000/api/medicines/read/"+ id,{headers: { authToken : this.props.value }})
+    // .then((res)=>{oldMedicine=res.data.data})
+    // let quantityOldMed=0
+    await axios.delete('http://localhost:5000/api/medicines/delete/' + id,{headers: { authToken : this.props.value }})
+    .then((response) => {
 
      this.getMedicines()
     });
 
 
-    for(var i=0;i<this.state.quantities.length;i++)
-    {
-       if(this.state.quantities[i].medicineName===oldMedicine.name)
-      {
-        quantityOldMed=this.state.quantities[i].quantity
-      }
-    }
-    const body={medicineName:oldMedicine.name,
-      quantity:quantityOldMed-1>=0?quantityOldMed-1:0}
+  //   for(var i=0;i<this.state.quantities.length;i++)
+  //   {
+  //      if(this.state.quantities[i].medicineName===oldMedicine.name)
+  //     {
+  //       quantityOldMed=this.state.quantities[i].quantity
+  //     }
+  //   }
+  //   const body={medicineName:oldMedicine.name,
+  //     quantity:quantityOldMed-1>=0?quantityOldMed-1:0}
 
-      this.updateMedicineQuantity(body,oldMedicine.name)
-      this.getQuantities()
+  //     this.updateMedicineQuantity(body,oldMedicine.name)
+  //
+  // }
   }
+  // addMedicineQuantity=async(body)=>{
+  //   await axios
+  //   .post(
+  //     'http://localhost:5000/api/medicinesQuantity/create',body,{headers: { authToken : this.props.value }}
+  //   )
+  //     .then()
+  //     .catch(error => {
+  //       alert(error.message)
+  //     })
+  // }
+  // updateMedicineQuantity=async(body,name)=>
+  // {
+  //   await axios
+  //   .put('http://localhost:5000/api/medicinesQuantity/'+name,body,{headers: { authToken : this.props.value }})
+  //   .then(
+  //
+  //   )
+  //     .catch(error => {
+  //       alert(error.message)
+  //     })
+  // }
+  // getQuantities=async()=>{
+  //  const res= await axios
+  //   .get('http://localhost:5000/api/medicinesQuantity/',{headers: { authToken : this.props.value }})
+  //   this.setState({ quantities: res.data.data });
 
-  addMedicineQuantity=async(body)=>{
-    await axios
-    .post(
-      'http://localhost:5000/api/medicinesQuantity/create',body
-    )
-      .then()
-      .catch(error => {
-        alert(error.message)
-      })
-  }
-  updateMedicineQuantity=async(body,name)=>
-  {
-    await axios
-    .put('http://localhost:5000/api/medicinesQuantity/'+name,body)
-    .then(
-      this.getQuantities()
-    )
-      .catch(error => {
-        alert(error.message)
-      })
-  }
-  getQuantities=async()=>{
-   const res= await axios
-    .get('http://localhost:5000/api/medicinesQuantity/')
-    this.setState({ quantities: res.data.data });
 
-
-  }
+  // }
   addMedicine=async()=>{
   await axios
   .post(
     'http://localhost:5000/api/medicines/create/',
-    this.state.newMedicine
+    this.state.newMedicine,{headers: { authToken : this.props.value }}
   )
   .then((response) => {
     let { medicines } = this.state;
+    this.getMedicines()
 
+    this.setState({ medicines, newMedicineModal: false, newMedicine: {
+       barcodeNumber:'',
+       name: '',
+       description: '',
+       price: '',
+       activeIngredients:'',
+       date:'',
+       quantity:''
+  }}
+    )
+  })
    // requests.push(response.data);
 
-if(this.state.quantities)
-    {
-      var flag=false
+// if(this.state.quantities)
+//     {
+//       var flag=false
 
-      for(var i=0;i<this.state.quantities.length;i++)
-      {
-         if(this.state.quantities[i].medicineName===this.state.newMedicine.name)
-        {
-          this.setState({quantity:this.state.quantities[i]})
-          console.log(this.state.quantity)
-          flag=true}
-      }
-      if(!flag)
-      {
-      const body={medicineName:this.state.newMedicine.name,
-        quantity:1}
-        this.addMedicineQuantity(body)}
-      else
-      {
-        const body={medicineName:this.state.newMedicine.name,
-          quantity:this.state.quantity.quantity+1}
-          console.log(body)
-          this.updateMedicineQuantity(body,this.state.newMedicine.name)
-      }
-
-
+//       for(var i=0;i<this.state.quantities.length;i++)
+//       {
+//          if(this.state.quantities[i].medicineName===this.state.newMedicine.name)
+//         {
+//           this.setState({quantity:this.state.quantities[i]})
+//           console.log(this.state.quantity)
+//           flag=true}
+//       }
+//       if(!flag)
+//       {
+//       const body={medicineName:this.state.newMedicine.name,
+//         quantity:1}
+//         this.addMedicineQuantity(body)}
+//       else
+//       {
+//         const body={medicineName:this.state.newMedicine.name,
+//           quantity:this.state.quantity.quantity+1}
+//           console.log(body)
+//           this.updateMedicineQuantity(body,this.state.newMedicine.name)
+//       }
 
 
-  }
-  else
-  {   const body={medicineName:this.state.newMedicine.name,
-    quantity:1}
-
-this.addMedicineQuantity(body)}
-  this.getMedicines()
-  this.getQuantities()
-   this.setState({ medicines, newMedicineModal: false, newMedicine: {
-      barcodeNumber:'',
-      name: '',
-      description: '',
-      price: '',
-      activeIngredients:'',
-      date:''
 
 
-    }});
+//   }
+//   else
+//   {   const body={medicineName:this.state.newMedicine.name,
+//     quantity:1}
 
-    })
+// this.addMedicineQuantity(body)}
+
+
+//     }});
+
+//     })
   .catch(error => {
     alert(error.message)
   })
@@ -194,65 +201,72 @@ this.addMedicineQuantity(body)}
 
       updateMedicine = async()=>{
       let {barcodeNumber,
-       description  , name , price,date,activeIngredients} = this.state.editMedicineData;
+       description  , name , price,date,activeIngredients,quantity} = this.state.editMedicineData;
       try{
 
-        let oldMedicine=""
-        await axios.get("http://localhost:5000/api/medicines/read/"+ this.state.editMedicineData.id)
-        .then((res)=>{oldMedicine=res.data.data})
+        // let oldMedicine=""
+        // await axios.get("http://localhost:5000/api/medicines/read/"+ this.state.editMedicineData.id,{headers: { authToken : this.props.value }})
+        // .then((res)=>{oldMedicine=res.data.data})
         await axios.put('http://localhost:5000/api/medicines/update/' + this.state.editMedicineData.id, {
 
-        barcodeNumber,name,description,price,date,activeIngredients
-      }).then((response) => {
-console.log(oldMedicine.name+" " +name)
-        if(oldMedicine.name!==name)
-        {
-
-
-      var flag=false
-
-      for(var i=0;i<this.state.quantities.length;i++)
-      {
-         if(this.state.quantities[i].medicineName===name)
-        {
-          this.setState({quantity:this.state.quantities[i]})
-          console.log(this.state.quantity)
-          flag=true}
-      }
-      if(!flag)
-      {
-      const body={medicineName:name,
-        quantity:1}
-        this.addMedicineQuantity(body)}
-      else
-      {
-        const body={medicineName:name,
-          quantity:this.state.quantity.quantity+1}
-          this.updateMedicineQuantity(body,name)
-      }
-      let quantityOldMed =0;
-      for(var i=0;i<this.state.quantities.length;i++)
-      {
-         if(this.state.quantities[i].medicineName===oldMedicine.name)
-        {
-          quantityOldMed=this.state.quantities[i].quantity
-        }
-      }
-      const body={medicineName:oldMedicine.name,
-        quantity:quantityOldMed-1>=0?quantityOldMed-1:0}
-        this.updateMedicineQuantity(body,oldMedicine.name)
-
-
-
-}
-        this.getMedicines()
+        barcodeNumber,name,description,price,date,activeIngredients,quantity
+      },{headers: { authToken : this.props.value }})
+      .then((response) => {  this.getMedicines()
         this.setState({
           editMedicineModal: false, editRequestData: { id: '',
           barcodeNumber:'',description:"" ,name:'',price:'',activeIngredients:'',
-          date:''}
-        })
-      });
-     }
+          date:'',quantity:""}
+        })})}
+
+// console.log(oldMedicine.name+" " +name)
+//         if(oldMedicine.name!==name)
+//         {
+
+
+//       var flag=false
+
+//       for(var i=0;i<this.state.quantities.length;i++)
+//       {
+//          if(this.state.quantities[i].medicineName===name)
+//         {
+//           this.setState({quantity:this.state.quantities[i]})
+//           console.log(this.state.quantity)
+//           flag=true}
+//       }
+//       if(!flag)
+//       {
+//       const body={medicineName:name,
+//         quantity:1}
+//         this.addMedicineQuantity(body)}
+//       else
+//       {
+//         const body={medicineName:name,
+//           quantity:this.state.quantity.quantity+1}
+//           this.updateMedicineQuantity(body,name)
+//       }
+//       let quantityOldMed =0;
+//       for(var i=0;i<this.state.quantities.length;i++)
+//       {
+//          if(this.state.quantities[i].medicineName===oldMedicine.name)
+//         {
+//           quantityOldMed=this.state.quantities[i].quantity
+//         }
+//       }
+//       const body={medicineName:oldMedicine.name,
+//         quantity:quantityOldMed-1>=0?quantityOldMed-1:0}
+//         this.updateMedicineQuantity(body,oldMedicine.name)
+
+
+
+// }
+//         this.getMedicines()
+//         this.setState({
+//           editMedicineModal: false, editRequestData: { id: '',
+//           barcodeNumber:'',description:"" ,name:'',price:'',activeIngredients:'',
+//           date:''}
+//         })
+//       });
+//      }
      catch(error)
      {
       alert(   error)
@@ -266,7 +280,8 @@ console.log(oldMedicine.name+" " +name)
      }
      componentDidMount()
      {this.getMedicines()
-      this.getQuantities()}
+
+    }
 componentDidUpdate()
 {}
 render=()=>{
@@ -282,6 +297,7 @@ render=()=>{
            <td style={{color:"#000"}}>{medicine.activeIngredients}</td>
            <td style={{color:"#00"}}>{medicine.description}</td>
            <td style={{color:"#000"}}>{medicine.price}</td>
+           <td style={{color:"#000"}}>{medicine.quantity}</td>
 
            <td style={{color:"#000"}}>
        <Button color="success" size="sm" className="mr-2" onClick={()=>this.editMedicine(
@@ -294,20 +310,7 @@ render=()=>{
          </tr>
        )
      }):"";
-     let  quantities = this.state.quantities?this.state.quantities.map((quantity) => {
-      return (
 
-
-              <tr key={quantity.id}>
-
-                <td style={{color:"#000"}}>{quantity.medicineName}</td>
-
-                <td style={{color:"#000"}}>{quantity.quantity}</td>
-
-
-              </tr>
-            )
-          }):"";
      return (
 
        <div className="App container">
@@ -361,6 +364,18 @@ render=()=>{
    this.setState({ newMedicine });
  }} />
 </FormGroup>
+
+<FormGroup>
+ <Label for="quantity">quantity</Label>
+ <Input id="quantity" value={this.state.newMedicine.quantity} onChange={(e) => {
+   let { newMedicine } = this.state;
+
+   newMedicine.quantity = e.target.value;
+
+   this.setState({ newMedicine });
+ }} />
+</FormGroup>
+
 
 <FormGroup>
  <Label for="activeIngredients">active ingredients</Label>
@@ -454,6 +469,18 @@ render=()=>{
           </FormGroup>
 
           <FormGroup>
+
+          <Label for="quantity">quantity</Label>
+          <Input id="quantity" value={this.state.editMedicineData.quantity} onChange={(e) => {
+          let { editMedicineData } = this.state;
+
+          editMedicineData.quantity = e.target.value;
+
+          this.setState({ editMedicineData });
+          }} />
+          </FormGroup>
+
+          <FormGroup>
  <Label for="activeIngredients">active ingredients</Label>
  <Input id="activeIngredients" value={this.state.editMedicineData.activeIngredients} onChange={(e) => {
    let { editMedicineData } = this.state;
@@ -510,6 +537,7 @@ render=()=>{
                <th style={{color:"#000"}}>ActiveIngredients</th>
                <th style={{color:"#000"}}>Description</th>
                <th style={{color:"#000"}}>Price</th>
+               <th style={{color:"#000"}}>quantity</th>
                <th style={{color:"#000"}}>Action</th>
 
              </tr>
@@ -519,19 +547,7 @@ render=()=>{
            </tbody>
          </Table>
 
-         <Table>
-           <thead>
-             <tr>
 
-               <th style={{color:"#000"}}>Name</th>
-               <th style={{color:"#000"}}>quantity</th>
-
-             </tr>
-           </thead>
-           <tbody>
-             {quantities}
-           </tbody>
-         </Table>
        </div>
      );
    }
