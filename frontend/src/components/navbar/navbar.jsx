@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Medicines from '../medicine/medicine.jsx'
 import Invoice from '../Invoice/Invoice.jsx'
-
+import Button from '@material-ui/core/Button'
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -82,6 +82,7 @@ export default function NavTabs(props) {
           <LinkTab label="Medicines" href="/drafts" {...a11yProps(0)} />
           <LinkTab label="Selling" href="/trash" {...a11yProps(1)} />
          </Tabs>
+
       </AppBar>
       <TabPanel value={value} index={0}>
       <Medicines key="1" value={props.value}/>

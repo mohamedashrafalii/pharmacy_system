@@ -26,6 +26,12 @@
     display: none;
   }
 
+  .logout {
+    border-right: thick;
+    padding-left: 100%;
+    color: blue($color: #000000);
+    }
+
 .addresses {
   display: flex;
   flex-flow: row wrap;

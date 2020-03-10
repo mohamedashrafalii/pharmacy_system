@@ -13,6 +13,7 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 import { isThisQuarter } from 'date-fns';
+import { MdBorderRight } from 'react-icons/md';
 class Medicine extends Component {
 
   state={
@@ -78,59 +79,15 @@ class Medicine extends Component {
 
   };
   deleteMedicine=async(id)=> {
-    // let oldMedicine=""
-    // await axios.get("http://localhost:5000/api/medicines/read/"+ id,{headers: { authToken : this.props.value }})
-    // .then((res)=>{oldMedicine=res.data.data})
-    // let quantityOldMed=0
+
     await axios.delete('http://localhost:5000/api/medicines/delete/' + id,{headers: { authToken : this.props.value }})
     .then((response) => {
 
      this.getMedicines()
     });
 
-
-  //   for(var i=0;i<this.state.quantities.length;i++)
-  //   {
-  //      if(this.state.quantities[i].medicineName===oldMedicine.name)
-  //     {
-  //       quantityOldMed=this.state.quantities[i].quantity
-  //     }
-  //   }
-  //   const body={medicineName:oldMedicine.name,
-  //     quantity:quantityOldMed-1>=0?quantityOldMed-1:0}
-
-  //     this.updateMedicineQuantity(body,oldMedicine.name)
-  //
-  // }
   }
-  // addMedicineQuantity=async(body)=>{
-  //   await axios
-  //   .post(
-  //     'http://localhost:5000/api/medicinesQuantity/create',body,{headers: { authToken : this.props.value }}
-  //   )
-  //     .then()
-  //     .catch(error => {
-  //       alert(error.message)
-  //     })
-  // }
-  // updateMedicineQuantity=async(body,name)=>
-  // {
-  //   await axios
-  //   .put('http://localhost:5000/api/medicinesQuantity/'+name,body,{headers: { authToken : this.props.value }})
-  //   .then(
-  //
-  //   )
-  //     .catch(error => {
-  //       alert(error.message)
-  //     })
-  // }
-  // getQuantities=async()=>{
-  //  const res= await axios
-  //   .get('http://localhost:5000/api/medicinesQuantity/',{headers: { authToken : this.props.value }})
-  //   this.setState({ quantities: res.data.data });
 
-
-  // }
   addMedicine=async()=>{
   await axios
   .post(
@@ -152,47 +109,7 @@ class Medicine extends Component {
   }}
     )
   })
-   // requests.push(response.data);
 
-// if(this.state.quantities)
-//     {
-//       var flag=false
-
-//       for(var i=0;i<this.state.quantities.length;i++)
-//       {
-//          if(this.state.quantities[i].medicineName===this.state.newMedicine.name)
-//         {
-//           this.setState({quantity:this.state.quantities[i]})
-//           console.log(this.state.quantity)
-//           flag=true}
-//       }
-//       if(!flag)
-//       {
-//       const body={medicineName:this.state.newMedicine.name,
-//         quantity:1}
-//         this.addMedicineQuantity(body)}
-//       else
-//       {
-//         const body={medicineName:this.state.newMedicine.name,
-//           quantity:this.state.quantity.quantity+1}
-//           console.log(body)
-//           this.updateMedicineQuantity(body,this.state.newMedicine.name)
-//       }
-
-
-
-
-//   }
-//   else
-//   {   const body={medicineName:this.state.newMedicine.name,
-//     quantity:1}
-
-// this.addMedicineQuantity(body)}
-
-
-//     }});
-
-//     })
   .catch(error => {
     alert(error.message)
   })
@@ -204,10 +121,7 @@ class Medicine extends Component {
        description  , name , price,date,activeIngredients,quantity} = this.state.editMedicineData;
       try{
 
-        // let oldMedicine=""
-        // await axios.get("http://localhost:5000/api/medicines/read/"+ this.state.editMedicineData.id,{headers: { authToken : this.props.value }})
-        // .then((res)=>{oldMedicine=res.data.data})
-        await axios.put('http://localhost:5000/api/medicines/update/' + this.state.editMedicineData.id, {
+         await axios.put('http://localhost:5000/api/medicines/update/' + this.state.editMedicineData.id, {
 
         barcodeNumber,name,description,price,date,activeIngredients,quantity
       },{headers: { authToken : this.props.value }})
@@ -218,55 +132,7 @@ class Medicine extends Component {
           date:'',quantity:""}
         })})}
 
-// console.log(oldMedicine.name+" " +name)
-//         if(oldMedicine.name!==name)
-//         {
 
-
-//       var flag=false
-
-//       for(var i=0;i<this.state.quantities.length;i++)
-//       {
-//          if(this.state.quantities[i].medicineName===name)
-//         {
-//           this.setState({quantity:this.state.quantities[i]})
-//           console.log(this.state.quantity)
-//           flag=true}
-//       }
-//       if(!flag)
-//       {
-//       const body={medicineName:name,
-//         quantity:1}
-//         this.addMedicineQuantity(body)}
-//       else
-//       {
-//         const body={medicineName:name,
-//           quantity:this.state.quantity.quantity+1}
-//           this.updateMedicineQuantity(body,name)
-//       }
-//       let quantityOldMed =0;
-//       for(var i=0;i<this.state.quantities.length;i++)
-//       {
-//          if(this.state.quantities[i].medicineName===oldMedicine.name)
-//         {
-//           quantityOldMed=this.state.quantities[i].quantity
-//         }
-//       }
-//       const body={medicineName:oldMedicine.name,
-//         quantity:quantityOldMed-1>=0?quantityOldMed-1:0}
-//         this.updateMedicineQuantity(body,oldMedicine.name)
-
-
-
-// }
-//         this.getMedicines()
-//         this.setState({
-//           editMedicineModal: false, editRequestData: { id: '',
-//           barcodeNumber:'',description:"" ,name:'',price:'',activeIngredients:'',
-//           date:''}
-//         })
-//       });
-//      }
      catch(error)
      {
       alert(   error)
@@ -312,7 +178,7 @@ render=()=>{
      }):"";
 
      return (
-
+<div><Button onClick={()=>{window.location.reload()}}>LOGOUT</Button>
        <div className="App container">
 
        <h1 style={{color:"#000"}}>Medicines</h1>
@@ -539,7 +405,6 @@ render=()=>{
                <th style={{color:"#000"}}>Price</th>
                <th style={{color:"#000"}}>quantity</th>
                <th style={{color:"#000"}}>Action</th>
-
              </tr>
            </thead>
            <tbody>
@@ -547,6 +412,7 @@ render=()=>{
            </tbody>
          </Table>
 
+         </div>
 
        </div>
      );

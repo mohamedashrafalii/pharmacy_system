@@ -3,9 +3,7 @@ import styles from './Invoice.module.scss'
 import axios from 'axios'
 import LineItems from './LineItems'
 import uuidv4 from 'uuid/v4'
-import Navbar from '../navbar/navbar'
-import { Nav } from 'reactstrap'
-
+import {Button} from 'reactstrap'
 var QRCode = require('qrcode.react')
 
 class Invoice extends Component {
@@ -89,17 +87,7 @@ class Invoice extends Component {
   handleFocusSelect = event => {
     event.target.select()
   }
-  // updateMedicineQuantity=async(body,name)=>
-  // {
-  //   await axios
-  //   .put('http://localhost:5000/api/medicinesQuantity/'+name,body,{headers: { authToken : this.props.value }})
-  //   .then(
 
-  //   )
-  //     .catch(error => {
-  //       alert(error.message)
-  //     })
-  // }
   getMedicineBYBarcode=async(barcodeNumber)=>
   {
     await axios
@@ -170,10 +158,7 @@ class Invoice extends Component {
 
   await axios.get("http://localhost:5000/api/medicines/read/"+ this.state.lineItems[i].id,{headers: { authToken : this.props.value }})
   .then((res)=>{oldMedicine=res.data.data})
-  //   await axios.get("http://localhost:5000/api/medicines/readBarcode/"+oldMedicine.barcodeNumber,{headers: { authToken : this.props.value }})
-  // .then((res)=>{oldMedicine=res.data.data})
-  //   await axios.get('http://localhost:5000/api/medicinesQuantity/'+oldMedicine[0].name,{headers: { authToken : this.props.value }})
-  // .then((res)=>{oldMedicine=res.data.data})
+
       if(quantitytmp>oldMedicine.quantity)
     {alert("no enough "+oldMedicine.name)
     showInv=false
@@ -323,11 +308,13 @@ componentDidMount=()=>{this.setState({lineItems:[]})}
       this.state.qrCODE = <QRCode value={this.state.flag} />
     } else this.state.qrCODE = null
     return (
+<div><Button  onClick={()=>{window.location.reload()}}>LOGOUT</Button>
 
       <div className={styles.invoice}>
 
         <div>
-          <h1>Bar Code Number</h1>
+
+         <h1>Bar Code Number</h1>
           <input name="barCodeNumber" className={styles.barcodeNumber } value={this.state.barcodeNumber} onChange={(e) => {
    this.setState({ barcodeNumber : e.target.value })
  }} />
@@ -426,7 +413,7 @@ componentDidMount=()=>{this.setState({lineItems:[]})}
           />
         </div>
         <button onClick={this.SendMail}>Send Mail</button>
-      </div>
+        </div>      </div>
     )
   }
 }
