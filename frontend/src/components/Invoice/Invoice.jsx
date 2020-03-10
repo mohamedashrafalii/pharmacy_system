@@ -237,7 +237,7 @@ class Invoice extends Component {
 
   goreceipt = () => {
     window.location.href =
-      'https://pharmcystem.herokuapp.com/receipt/' +
+      'https://pharmacystem.herokuapp.com/receipt/' +
       this.state.id +
       '/' +
       this.formatCurrency(this.calcGrandTotal())
