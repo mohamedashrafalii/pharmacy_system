@@ -5,11 +5,12 @@
   "main": "server.js",
   "scripts": {
     "frontend-install": "npm install --prefix frontend",
-    
+    "install-server": "npm install",
+
     "start": "node server.js",
     "server": "nodemon server.js",
     "dev": "concurrently \"npm run server\" \"npm run frontend\"",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install server && npm run build server"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm run install-server && npm run build "
   },
   "author": "Mohamed Ashraf",
   "license": "GUC",
