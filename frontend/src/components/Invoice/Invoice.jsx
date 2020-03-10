@@ -173,7 +173,7 @@ class Invoice extends Component {
   if(showInv){
       this.setState({
         flag:
-          'https://pharmacystem.herokuapp.com/api/receipts/read/' +
+          'https://pharmacystem.herokuapp.com/receipt/' +
           this.state.id +
           '/' +
           this.formatCurrency(this.calcGrandTotal()),
