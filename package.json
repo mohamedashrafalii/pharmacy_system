@@ -8,9 +8,8 @@
     "install-server": "npm install",
 
     "start": "node server.js",
-    "server": "nodemon server.js",
-    "dev": "concurrently \"npm run server\" \"npm run frontend\"",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm run install-server && npm run build "
+  
+    "dev":"nodemon server.js"
   },
   "author": "Mohamed Ashraf",
   "license": "GUC",
