@@ -1,16 +1,17 @@
 {
-  "name": "ReceiptFree",
+  "name": "pharma-system",
   "version": "1.0.0",
-  "description": "ReceiptFree project",
+  "description": "pharma-system project",
   "main": "server.js",
   "scripts": {
     "frontend-install": "npm install --prefix frontend",
+    
     "start": "node server.js",
     "server": "nodemon server.js",
     "dev": "concurrently \"npm run server\" \"npm run frontend\"",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install server && npm run build server"
   },
-  "author": "Omar Saad",
+  "author": "Mohamed Ashraf",
   "license": "GUC",
   "dependencies": {
     "bcrypt": "^4.0.0",
