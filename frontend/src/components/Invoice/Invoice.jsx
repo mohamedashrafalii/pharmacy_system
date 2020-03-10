@@ -173,7 +173,7 @@ class Invoice extends Component {
   if(showInv){
       this.setState({
         flag:
-          'http://localhost:3000/api/receipts/read/' +
+          'https://pharmacystem.herokuapp.com/api/receipts/read/' +
           this.state.id +
           '/' +
           this.formatCurrency(this.calcGrandTotal()),
@@ -237,7 +237,7 @@ class Invoice extends Component {
 
   goreceipt = () => {
     window.location.href =
-      'http://localhost:3000/receipt/' +
+      'https://pharmcystem.herokuapp.com/receipt/' +
       this.state.id +
       '/' +
       this.formatCurrency(this.calcGrandTotal())
