@@ -17,9 +17,8 @@ class Login extends Component {
   {
     const body= {"userName":this.state.userName,"password":this.state.password}
     await axios
-    .post("http://localhost:5000/api/auth/login",body)
+    .post("https://pharma-system.herokuapp.com/api/auth/login",body)
     .then(res=>{this.setState({token:res.data})
-           // console.log(res.data)
             this.setState({flag:true})
 
   }

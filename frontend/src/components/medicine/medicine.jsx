@@ -73,14 +73,14 @@ class Medicine extends Component {
   getMedicines = async  ()=> {
 
     const res = await axios.get(
-      "http://localhost:5000/api/medicines/read",{headers: { authToken : this.props.value }}
+      "https://pharma-system.herokuapp.com/api/medicines/read",{headers: { authToken : this.props.value }}
       );
     this.setState({ medicines: res.data.data });
 
   };
   deleteMedicine=async(id)=> {
 
-    await axios.delete('http://localhost:5000/api/medicines/delete/' + id,{headers: { authToken : this.props.value }})
+    await axios.delete('https://pharma-system.herokuapp.com/api/medicines/delete/' + id,{headers: { authToken : this.props.value }})
     .then((response) => {
 
      this.getMedicines()
@@ -91,7 +91,7 @@ class Medicine extends Component {
   addMedicine=async()=>{
   await axios
   .post(
-    'http://localhost:5000/api/medicines/create/',
+    'https://pharma-system.herokuapp.com/api/medicines/create/',
     this.state.newMedicine,{headers: { authToken : this.props.value }}
   )
   .then((response) => {
@@ -121,7 +121,7 @@ class Medicine extends Component {
        description  , name , price,date,activeIngredients,quantity} = this.state.editMedicineData;
       try{
 
-         await axios.put('http://localhost:5000/api/medicines/update/' + this.state.editMedicineData.id, {
+         await axios.put('https://pharma-system.herokuapp.com/api/medicines/update/' + this.state.editMedicineData.id, {
 
         barcodeNumber,name,description,price,date,activeIngredients,quantity
       },{headers: { authToken : this.props.value }})
