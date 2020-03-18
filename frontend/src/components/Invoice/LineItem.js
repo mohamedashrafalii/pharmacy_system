@@ -16,7 +16,7 @@ class LineItem extends Component {
         <div><input name="name"  type="text" value={name} onChange={this.props.changeHandler(index)} readOnly /></div>
         <div><input name="description" type="text" value={description} onChange={this.props.changeHandler(index)} readOnly/></div>
         <div><input name="quantity" type="number" step="1" value={quantity} min="1" onChange={this.props.changeHandler(index)} onFocus={this.props.focusHandler} /></div>
-        <div className={styles.currency}><input name="price" type="number" step="0.01" min="0.00" max="9999999.99" value={price} onChange={this.props.changeHandler(index)} onFocus={this.props.focusHandler} /></div>
+        <div className={styles.currency}><input name="price" type="number" step="0.01" min="0.00" max="9999999.99" value={price} onChange={this.props.changeHandler(index)} onFocus={this.props.focusHandler} readOnly /></div>
         <div className={styles.currency}>{this.props.currencyFormatter( quantity * price )}</div>
         <div>
           <button type="button"

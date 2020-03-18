@@ -13,6 +13,7 @@ class Invoice extends Component {
   currency = 'USD'
 
   state = {
+    mailReady:false,
     medicineId:'',
     mail: '',
     flag: '',
@@ -95,6 +96,11 @@ class Invoice extends Component {
         'https://pharma-system.herokuapp.com/api/medicines/readBarcode/'+barcodeNumber,{headers: { authToken : this.props.value }}
       )
       .then((res) => {
+        let firstDate = new Date()
+        let secondDate = new Date(res.data.data[0].date+"")
+        const timeDifference = secondDate-firstDate;
+        if(timeDifference<=0)
+        return alert("Sorry this medicine is expired!")
         this.setState({medicine:{id:res.data.data[0]._id,name:res.data.data[0].name,price:res.data.data[0].price,description:res.data.data[0].description}})
         this.handleAddLineItem()
       })
@@ -177,7 +183,8 @@ class Invoice extends Component {
           this.state.id +
           '/' +
           this.formatCurrency(this.calcGrandTotal()),
-        show: true
+        show: true,
+        mailReady:true
       })
     }
   }
@@ -186,6 +193,7 @@ class Invoice extends Component {
   handleNewReceiptClick = event => {
     event.preventDefault()
     this.setState({ medicineId:'',
+    mailReady:false,
     mail: '',
     flag: '',
     show: false,
@@ -237,14 +245,18 @@ class Invoice extends Component {
 
   goreceipt = () => {
     window.location.href =
-      'https://pharmcystem.herokuapp.com/receipt/' +
+      'https://pharmacystem.herokuapp.com/receipt/' +
       this.state.id +
       '/' +
       this.formatCurrency(this.calcGrandTotal())
   }
 
   SendMail = async () => {
-    const res = await axios.get(
+    if(this.state.mail==="")
+    alert("Enter a valid email adress!")
+    else
+    if(this.state.mailReady)
+    {const res = await axios.get(
       'https://pharma-system.herokuapp.com/api/receipts/read/' +
         this.state.id,{headers: { authToken : this.props.value }}
     )
@@ -289,27 +301,33 @@ class Invoice extends Component {
         mail: this.state.mail,
         mailBody: mailBody
       },{headers: { authToken : this.props.value }})
-      .then( alert('Sent'))
+      .then((res)=>{
+
+        alert(res.data)
+      })
       .catch(error => {
         alert(error.message)
       })
-
+    }
+    else{alert("Pay first!")}
   }
 
   onChangeMail=async(e) => {
+
     await this.setState({
       mail: e.target.value
     })
   }
 componentDidMount=()=>{this.setState({lineItems:[]})}
   render = () => {
+
     // let qrCODE
+    if(this.props.value){
     if (this.state.show) {
       this.state.qrCODE = <QRCode value={this.state.flag} />
     } else this.state.qrCODE = null
     return (
-<div><Button  onClick={()=>{window.location.reload()}}>LOGOUT</Button>
-
+<div>
       <div className={styles.invoice}>
 
         <div>
@@ -399,8 +417,7 @@ componentDidMount=()=>{this.setState({lineItems:[]})}
             <div>Thank-you for your business</div>
           </div>
         </div>
-        <button onClick={this.goreceipt}>Receipt</button>
-        <br />
+       <br />
         <br />
         <div class="form-label-group">
           <input
@@ -416,6 +433,11 @@ componentDidMount=()=>{this.setState({lineItems:[]})}
         </div>      </div>
     )
   }
+  else {return  (
+    <h>Not Authorized</h>
+  )
+  }
+}
 }
 
 export default Invoice
