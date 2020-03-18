@@ -71,9 +71,9 @@ const SendMail =async (req,res)=> {
  
  transporter.sendMail(mailOptions, function(error, info){
    if (error) {
-     console.log(error);
+    return res.status(400).send(error)
    } else {
-     console.log('Email sent: ' + info.response);
+    return res.send('Email sent: ' + info.response);
    }
  });
 };

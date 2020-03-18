@@ -2,7 +2,7 @@ const User = require("../../models/user.model")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 Register=async (req, res) => {
-    const userExist=await User.findOne({userName:req.body.userName})
+    const userExist=await User.findOne({username:req.body.username})
     if(userExist)
     return res.status(400).send("username already taken")
 
@@ -40,14 +40,21 @@ Register=async (req, res) => {
       };
       
       Login=async(req,res)=>{
-        const user=await User.findOne({userName:req.body.userName})
+        try{
+        const user=await User.findOne({username:req.body.username})
         if(!user)
-        return res.status(400).send("Wrong Username")
+        return res.send("Wrong username or password!")
         const validPass=await bcrypt.compare(req.body.password,user.password)
         if(!validPass)
-        return res.status(400).send("Wrong Password")
+        return res.send("Wrong username or password!")
       
         const token = jwt.sign({_id:user._id},process.env.TOKEN)
         res.header('authToken',token).send(token);
-      }
-    module.exports = {Register,get_Allusers,Login}
+      }  catch(error){res.json({err:error.message})}
+    
+    }
+    Logout=async(req,res)=>{
+      jwt.sign({_id:""},process.env.TOKEN)
+      res.header('authToken',"").send("Logged out!");
+    }
+    module.exports = {Register,get_Allusers,Login,Logout}

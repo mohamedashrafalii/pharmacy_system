@@ -9,6 +9,8 @@ import Box from '@material-ui/core/Box';
 import Medicines from '../medicine/medicine.jsx'
 import Invoice from '../Invoice/Invoice.jsx'
 import Button from '@material-ui/core/Button'
+import User from '../users/users.jsx'
+import axios from 'axios'
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -68,7 +70,8 @@ export default function NavTabs(props) {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
+  if(props.value)
+{
   return (
 
     <div className={classes.root}>
@@ -81,6 +84,15 @@ export default function NavTabs(props) {
         >
           <LinkTab label="Medicines" href="/drafts" {...a11yProps(0)} />
           <LinkTab label="Selling" href="/trash" {...a11yProps(1)} />
+          {props.user==="admin"&&
+          <LinkTab label="Users" href="/" {...a11yProps(2)} />
+          }
+          <button style={{background:"inherit",color:"white"}} onClick={async()=>{localStorage.removeItem('token')
+          localStorage.removeItem('type')
+          await axios.get("https://pharma-system.herokuapp.com/api/auth/Logout")
+                          window.location.href='https://pharmacystem.herokuapp.com/'
+
+                        }}>LOGOUT</button>
          </Tabs>
 
       </AppBar>
@@ -90,7 +102,15 @@ export default function NavTabs(props) {
       <TabPanel value={value} index={1}>
         <Invoice key="2" value={props.value}/>
       </TabPanel>
-
+      {props.user==="admin"&&
+      <TabPanel value={value} index={2}>
+        <User key="3" value={props.value}/>
+      </TabPanel>
+}
     </div>
   );
+}else {return  (
+  <h1 style={{color:"red"}}>Not Authorized</h1>
+)
+}
 }

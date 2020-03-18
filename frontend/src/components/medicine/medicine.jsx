@@ -84,7 +84,8 @@ class Medicine extends Component {
     .then((response) => {
 
      this.getMedicines()
-    });
+    })
+    .catch(error=>{alert(error.message)});
 
   }
 
@@ -95,6 +96,8 @@ class Medicine extends Component {
     this.state.newMedicine,{headers: { authToken : this.props.value }}
   )
   .then((response) => {
+    if(response.data.msg!=="Created successfully")
+    return alert(response.data)
     let { medicines } = this.state;
     this.getMedicines()
 
@@ -125,7 +128,10 @@ class Medicine extends Component {
 
         barcodeNumber,name,description,price,date,activeIngredients,quantity
       },{headers: { authToken : this.props.value }})
-      .then((response) => {  this.getMedicines()
+      .then((response) =>
+      {  if(response.data.msg!=="Request updated successfully")
+      return alert(response.data)
+          this.getMedicines()
         this.setState({
           editMedicineModal: false, editRequestData: { id: '',
           barcodeNumber:'',description:"" ,name:'',price:'',activeIngredients:'',
@@ -152,9 +158,10 @@ componentDidUpdate()
 {}
 render=()=>{
 
+  if(this.props.value)
+  {
   let  medicines = this.state.medicines?this.state.medicines.map((medicine) => {
  return (
-
 
          <tr key={medicine.id}>
            <td style={{color:"#000"}}>{medicine.barcodeNumber}</td>
@@ -178,24 +185,25 @@ render=()=>{
      }):"";
 
      return (
-<div><Button onClick={()=>{window.location.reload()}}>LOGOUT</Button>
-       <div className="App container">
+<div> <div className="App container">
 
        <h1 style={{color:"#000"}}>Medicines</h1>
         <Button className="my-3" color="primary" onClick={this.toggleNewMedicinetModal.bind(this)}>Add Medicine</Button>
 
-        <Input id="barcode" style={{width:"20%",margin:"1%"}} value={this.state.newMedicine.barcodeNumber} onChange={(e) => {
-   let { newMedicine } = this.state;
-
-   newMedicine.barcodeNumber = e.target.value;
-
-   this.setState({ newMedicine });
- }} />
 
 
 <Modal isOpen={this.state.newMedicineModal} toggle={this.toggleNewMedicinetModal.bind(this)}>
 <ModalHeader toggle={this.toggleNewMedicinetModal.bind(this)}>Add a new Medicine</ModalHeader>
 <ModalBody>
+
+<FormGroup>
+ <Label for="barcode">barcode number</Label>
+ <Input id="barcode"  value={this.state.newMedicine.barcodeNumber} onChange={(e) => {
+   let { newMedicine } = this.state;newMedicine.barcodeNumber = e.target.value;
+
+   this.setState({ newMedicine });
+ }} />
+</FormGroup>
 
 <FormGroup>
  <Label for="name">name</Label>
@@ -297,6 +305,18 @@ render=()=>{
    <ModalHeader toggle={this.toggleEditMedicineModal.bind(this)}>Edit Medicine</ModalHeader>
    <ModalBody>
 
+   <FormGroup>
+
+<Label for="barcodeNumber">barcode number</Label>
+<Input id="barcodeNumber" value={this.state.editMedicineData.barcodeNumber} onChange={(e) => {
+ let { editMedicineData } = this.state;
+
+ editMedicineData.barcodeNumber = e.target.value;
+
+ this.setState({ editMedicineData });
+}} />
+
+</FormGroup>
 
      <FormGroup>
 
@@ -417,6 +437,11 @@ render=()=>{
        </div>
      );
    }
+   else {return  (
+     <h>Not Authorized</h>
+   )
+   }
+  }
 
 }
 

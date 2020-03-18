@@ -37,6 +37,7 @@ app.get("/", (req, res) => res.send(`<h1>Welcome to Beat the Receipt app</h1>`))
 app.use("/api/receipts",require("./api/routes/receipt.router"));
 app.use("/api/medicines",require("./api/routes/medicine.router"));
 app.use("/api/auth",require("./api/routes/auth.router"));
+app.use("/api/users",require("./api/routes/users.router"));
 
 // Wrong path
 app.use((req, res) =>

@@ -1,13 +1,16 @@
 const Medicine = require("../../models/medicine.model");
 //Create 
+const {addMedicineValidation,editMedicineValidation} = require("../../validations/medicineValidation")
 const Create =async (req, res) => {
+  const {error} = addMedicineValidation(req.body)
+  if(error) return res.send(error.details[0].message) 
   const medicine = await Medicine.create(req.body)
 
   .then(createdMedicine => {
         res.json({
             msg:"Created successfully",
             id:createdMedicine._id,
-            data:medicine
+            data:createdMedicine
           });
          
     },
@@ -70,6 +73,9 @@ catch(error){res.json({err:error.message})}
 
 update_medicine = async  (req, res) => {
   try{
+    const {error} = editMedicineValidation(req.body)
+    if(error) return res.send(error.details[0].message) 
+    
   const medicineId = req.params.id;
   
   const medicine =  await Medicine.findById(medicineId)

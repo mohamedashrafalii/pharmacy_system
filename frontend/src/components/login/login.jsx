@@ -5,21 +5,35 @@ import Navbar from '../navbar/navbar'
 import Medicine from '../medicine/medicine'
 import { Input } from '@material-ui/core'
 import { getWeekYearWithOptions } from 'date-fns/fp'
+
+import { BrowserRouter, Route } from "react-router-dom";
 class Login extends Component {
 
   state={
     token:'',
-    userName:'',
+    username:'',
     password:'',
-    flag:false
+    type:''
+
   }
+
   login=async()=>
   {
-    const body= {"userName":this.state.userName,"password":this.state.password}
+    const body= {"username":this.state.username,"password":this.state.password}
     await axios
     .post("https://pharma-system.herokuapp.com/api/auth/login",body)
     .then(res=>{this.setState({token:res.data})
-            this.setState({flag:true})
+if(res.data==="Wrong username or password!")
+alert("Wrong username or password!")
+else
+
+{
+  //alert(this.state.username)
+   this.sendData()
+window.location.href='https://pharmacystem.herokuapp.com/main'
+
+}
+
 
   }
 
@@ -28,18 +42,23 @@ class Login extends Component {
       alert(error.message)
     })
   }
+
+  sendData = () => {
+    this.props.value({token:this.state.token,username:this.state.username});
+}
   render=()=>
   {
-    if(!this.state.flag)
     return(
+
     <div>
+
       <p>Username</p>
-    <Input key="2" value={this.state.userName} onChange={(e) => {
-   let { userName } = this.state;
+    <Input key="2" value={this.state.username} onChange={(e) => {
+   let { username } = this.state;
 
-   userName= e.target.value;
+   username= e.target.value;
 
-   this.setState({ userName });
+   this.setState({ username });
  }}/>
     <p>Password</p>
     <Input key="3" type="password" value={this.state.password} onChange={(e) => {
@@ -53,8 +72,7 @@ class Login extends Component {
     <Button  onClick={()=>this.login()}>login</Button>
     </div>
     )
-    else
-    return(<Navbar key="1" value={this.state.token} />)
+
 }}
 
 export default Login
