@@ -21,7 +21,7 @@ class App extends Component {
     localStorage.setItem('token',childData.token)
 
     this.getUserType(this.state.username)
-
+console.log(this.state.type)
 
 }
 getUserType=async(username)=>
@@ -33,7 +33,7 @@ getUserType=async(username)=>
     this.setState({type:x})
     localStorage.setItem('type',this.state.type)
 
-    // this.forceUpdate()
+     this.forceUpdate()
   })}
   UNSAFE_componentWillUpdate(nextProps,nextState)
 {
