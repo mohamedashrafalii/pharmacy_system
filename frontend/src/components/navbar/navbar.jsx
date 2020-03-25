@@ -90,8 +90,13 @@ export default function NavTabs(props) {
           }
           <button style={{background:"inherit",color:"white"}} onClick={async()=>{localStorage.removeItem('token')
           localStorage.removeItem('type')
+<<<<<<< HEAD:src/components/navbar/navbar.jsx
           await axios.get("http://pharma-system.herokuapp.com/api/auth/Logout")
                           window.location.href='http://pharmacystem.herokuapp.com/'
+=======
+          await axios.get("https://pharma-system.herokuapp.com/api/auth/Logout")
+                          window.location.href='https://pharmacystem.herokuapp.com/'
+>>>>>>> 2e1a36be590352528a25e68f05056ad534e79f52:frontend/src/components/navbar/navbar.jsx
 
                         }}>LOGOUT</button>
          </Tabs>
