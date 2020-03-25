@@ -85,7 +85,7 @@ export default function NavTabs(props) {
         >
           <LinkTab label="Medicines" href="/drafts" {...a11yProps(0)} />
           <LinkTab label="Selling" href="/trash" {...a11yProps(1)} />
-          {props.user==="admin"&&
+          {props.match.params.type==="admin"&&
           <LinkTab label="Users" href="/" {...a11yProps(2)} />
           }
           <button style={{background:"inherit",color:"white"}} onClick={async()=>{localStorage.removeItem('token')

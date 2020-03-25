@@ -30,7 +30,7 @@ else
 {
   //alert(this.state.username)
    this.sendData()
-window.location.href='https://pharmacystem.herokuapp.com/main'
+window.location.href='https://pharmacystem.herokuapp.com/main/'+this.state.type
 
 }
 

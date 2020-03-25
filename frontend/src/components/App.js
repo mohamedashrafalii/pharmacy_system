@@ -57,7 +57,7 @@ UNSAFE_componentWillMount()
    <Switch>
    <Route exact path="/"  component={()=><Login key="2" value={this.callbackFunction} />} />
 
-   <Route exact path="/main"  component={()=><Navbar key="1" value={localStorage.getItem('token')} user={localStorage.getItem('type')}/>} />
+   <Route exact path="/main/:type"  component={()=><Navbar key="1" value={localStorage.getItem('token')}/>} />
 
    <Route exact path="/receipt/:id/:price"  component={Receipt}  />
    <Route exact path="/main/receipt"  component={()=><Invoice key="1" value={this.state.token} />}  />
