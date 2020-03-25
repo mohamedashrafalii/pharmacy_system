@@ -26,7 +26,7 @@ console.log(this.state.type)
 }
 getUserType=async(username)=>
 {
-   await axios.get( "http://pharma-system.herokuapp.com/api/users/"+username,{headers: { authToken :this.state.token }}
+   await axios.get( "https://pharma-system.herokuapp.com/api/users/"+username,{headers: { authToken :this.state.token }}
   ).then((response) => {
     const x=response.data.data[0].type
 
