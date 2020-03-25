@@ -89,10 +89,9 @@ export default function NavTabs(props) {
           <LinkTab label="Users" href="/" {...a11yProps(2)} />
           }
           <button style={{background:"inherit",color:"white"}} onClick={async()=>{localStorage.removeItem('token')
-          localStorage.removeItem('type')
 
-          await axios.get("https://pharma-system.herokuapp.com/api/auth/Logout")
-                          window.location.href='https://pharmacystem.herokuapp.com/'
+          await axios.get("https://pharma-system.herokuapp.com/auth/Logout")
+                          window.location.href='https://pharmacystem.herokuapp.com'
 
                         }}>LOGOUT</button>
          </Tabs>

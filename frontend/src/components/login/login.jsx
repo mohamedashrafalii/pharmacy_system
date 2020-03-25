@@ -16,7 +16,18 @@ class Login extends Component {
     type:''
 
   }
+  getUserType=async(username)=>
+  {
+     await axios.get( "https://pharma-system.herokuapp.com/api/users/"+username,{headers: { authToken :this.state.token }}
+    ).then((response) => {
+      const x=response.data.data[0].type
 
+      this.setState({type:x})
+      console.log(x)
+      console.log(this.state.type)
+      window.location.href='https://pharmacystem.herokuapp.com/main/'+x
+       this.forceUpdate()
+    })}
   login=async()=>
   {
     const body= {"username":this.state.username,"password":this.state.password}
@@ -28,18 +39,10 @@ alert("Wrong username or password!")
 else
 
 {
-  await axios.get( "https://pharma-system.herokuapp.com/api/users/"+username,{headers: { authToken :this.state.token }}
-  ).then((response) => {
-    const x=response.data.data[0].type
-
-    this.setState({type:x})
-
-
-     this.forceUpdate()
-  })
   //alert(this.state.username)
    this.sendData()
-window.location.href='https://pharmacystem.herokuapp.com/main/'+this.state.type
+   this.getUserType(this.state.username)
+//window.location.href='http://localhost:3000/main/'+this.state.type
 
 }
 
