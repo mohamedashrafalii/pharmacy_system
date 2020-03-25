@@ -28,6 +28,15 @@ alert("Wrong username or password!")
 else
 
 {
+  await axios.get( "https://pharma-system.herokuapp.com/api/users/"+username,{headers: { authToken :this.state.token }}
+  ).then((response) => {
+    const x=response.data.data[0].type
+
+    this.setState({type:x})
+
+
+     this.forceUpdate()
+  })
   //alert(this.state.username)
    this.sendData()
 window.location.href='https://pharmacystem.herokuapp.com/main/'+this.state.type
