@@ -93,7 +93,7 @@ class Invoice extends Component {
   {
     await axios
       .get(
-        'https://pharma-system.herokuapp.com/api/medicines/readBarcode/'+barcodeNumber,{headers: { authToken : this.props.value }}
+        'http://pharma-system.herokuapp.com/api/medicines/readBarcode/'+barcodeNumber,{headers: { authToken : this.props.value }}
       )
       .then((res) => {
         let firstDate = new Date()
@@ -121,7 +121,7 @@ class Invoice extends Component {
 
     await axios
       .post(
-        'https://pharma-system.herokuapp.com/api/receipts/create',
+        'http://pharma-system.herokuapp.com/api/receipts/create',
         { receipt: this.state.lineItems },{headers: { authToken : this.props.value }}
       )
       .then(res => {
@@ -141,7 +141,7 @@ class Invoice extends Component {
 
       let quantitytmp=this.state.lineItems[i].quantity;
 
-      await axios.get("https://pharma-system.herokuapp.com/api/medicines/read/"+ this.state.lineItems[i].id,{headers: { authToken : this.props.value }})
+      await axios.get("http://pharma-system.herokuapp.com/api/medicines/read/"+ this.state.lineItems[i].id,{headers: { authToken : this.props.value }})
       .then((res)=>{oldMedicine=res.data.data})
 
         if(quantitytmp>oldMedicine.quantity)
@@ -162,7 +162,7 @@ class Invoice extends Component {
 
   let quantitytmp=this.state.lineItems[i].quantity;
 
-  await axios.get("https://pharma-system.herokuapp.com/api/medicines/read/"+ this.state.lineItems[i].id,{headers: { authToken : this.props.value }})
+  await axios.get("http://pharma-system.herokuapp.com/api/medicines/read/"+ this.state.lineItems[i].id,{headers: { authToken : this.props.value }})
   .then((res)=>{oldMedicine=res.data.data})
 
       if(quantitytmp>oldMedicine.quantity)
@@ -173,7 +173,7 @@ class Invoice extends Component {
     else{
   const body={
     quantity:oldMedicine.quantity-quantitytmp>=0?oldMedicine.quantity-quantitytmp:0}
-    await axios.put("https://pharma-system.herokuapp.com/api/medicines/update/"+ this.state.lineItems[i].id,body,{headers: { authToken : this.props.value }})
+    await axios.put("http://pharma-system.herokuapp.com/api/medicines/update/"+ this.state.lineItems[i].id,body,{headers: { authToken : this.props.value }})
   }
 }
   if(showInv){
@@ -245,7 +245,7 @@ class Invoice extends Component {
 
   goreceipt = () => {
     window.location.href =
-      'https://pharmacystem.herokuapp.com/receipt/' +
+      'http://pharmacystem.herokuapp.com/receipt/' +
       this.state.id +
       '/' +
       this.formatCurrency(this.calcGrandTotal())
@@ -254,11 +254,10 @@ class Invoice extends Component {
   SendMail = async () => {
     if(this.state.mail==="")
     alert("Enter a valid email adress!")
-    else
-    if(this.state.mailReady)
+    else if(this.state.mailReady)
     {const res = await axios.get(
-      'https://pharma-system.herokuapp.com/api/receipts/read/' +
-        this.state.id,{headers: { authToken : this.props.value }}
+      'http://pharma-system.herokuapp.com/api/receipts/read/' +
+        this.state.id
     )
 
     let mailBody = ''
@@ -297,7 +296,7 @@ class Invoice extends Component {
       '\n'
 
     axios
-      .post('https://pharma-system.herokuapp.com/api/receipts/sendMail', {
+      .post('http://pharma-system.herokuapp.com/api/receipts/sendMail', {
         mail: this.state.mail,
         mailBody: mailBody
       },{headers: { authToken : this.props.value }})

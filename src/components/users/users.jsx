@@ -42,14 +42,14 @@ class User extends Component {
     getUsers = async  ()=> {
 
     const res = await axios.get(
-      "https://pharma-system.herokuapp.com/api/users/",{headers: { authToken : this.props.value }}
+      "http://pharma-system.herokuapp.com/api/users/",{headers: { authToken : this.props.value }}
       );
     this.setState({ Users: res.data.data });
 
   };
   deleteUser=async(id)=> {
 
-    await axios.delete('https://pharma-system.herokuapp.com/api/users/delete/' + id,{headers: { authToken : this.props.value }})
+    await axios.delete('http://pharma-system.herokuapp.com/api/users/delete/' + id,{headers: { authToken : this.props.value }})
     .then((response) => {
 
      this.getUsers()
@@ -62,7 +62,7 @@ class User extends Component {
   addUser=async()=>{
   await axios
   .post(
-    'https://pharma-system.herokuapp.com/api/users/addUser/',
+    'http://pharma-system.herokuapp.com/api/users/addUser/',
     this.state.newUser,{headers: { authToken : this.props.value }}
   )
   .then((response) => {

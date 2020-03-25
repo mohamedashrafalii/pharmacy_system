@@ -21,7 +21,7 @@ class Login extends Component {
   {
     const body= {"username":this.state.username,"password":this.state.password}
     await axios
-    .post("https://pharma-system.herokuapp.com/api/auth/login",body)
+    .post("http://pharma-system.herokuapp.com/api/auth/login",body)
     .then(res=>{this.setState({token:res.data})
 if(res.data==="Wrong username or password!")
 alert("Wrong username or password!")
@@ -30,7 +30,7 @@ else
 {
   //alert(this.state.username)
    this.sendData()
-window.location.href='https://pharmacystem.herokuapp.com/main'
+window.location.href='http://pharmacystem.herokuapp.com/main'
 
 }
 
