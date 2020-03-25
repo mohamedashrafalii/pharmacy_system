@@ -39,7 +39,7 @@ addUser=async (req, res) => {
         });
       })
     }
-    const getByUsername =async (req, res) => {
+     getByUsername =async (req, res) => {
       const username = req.params.username
       User.find({username:username})
       .then(foundUSer => {
