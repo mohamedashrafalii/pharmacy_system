@@ -24,6 +24,7 @@ class App extends Component {
 
 }
 
+
   UNSAFE_componentWillUpdate(nextProps,nextState)
 {
   localStorage.setItem('token',nextState.token)
@@ -44,7 +45,7 @@ UNSAFE_componentWillMount()
    <Switch>
    <Route exact path="/"  component={()=><Login key="2" value={this.callbackFunction} />} />
 
-   <Route exact path="/main/:type"  component={(props)=><Navbar key="1" {...props} value={localStorage.getItem('token')} />} />
+   <Route exact path="/main/:type"  component={(props)=><Navbar key="1" {...props} type={localStorage.getItem("type")} value={localStorage.getItem('token')} />} />
 
    <Route exact path="/receipt/:id/:price"  component={Receipt}  />
    <Route exact path="/main/receipt"  component={()=><Invoice key="1" value={this.state.token} />}  />

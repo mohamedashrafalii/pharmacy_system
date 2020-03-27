@@ -71,7 +71,7 @@ export default function NavTabs(props) {
     setValue(newValue);
   };
   console.log(props.value)
-  if(props.value)
+  if(props.value&&props.type===props.match.params.type)
 {
   return (
 
@@ -89,8 +89,8 @@ export default function NavTabs(props) {
           <LinkTab label="Users" href="/" {...a11yProps(2)} />
           }
           <button style={{background:"inherit",color:"white"}} onClick={async()=>{localStorage.removeItem('token')
-
-          await axios.get("https://pharma-system.herokuapp.com/api/auth/Logout")
+localStorage.removeItem('type')
+          await axios.get("https://pharma-system.herokuapp.com/auth/Logout")
                           window.location.href='https://pharmacystem.herokuapp.com'
 
                         }}>LOGOUT</button>

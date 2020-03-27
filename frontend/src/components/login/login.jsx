@@ -25,7 +25,9 @@ class Login extends Component {
       this.setState({type:x})
       console.log(x)
       console.log(this.state.type)
+      localStorage.setItem("type",x)
       window.location.href='https://pharmacystem.herokuapp.com/main/'+x
+
        this.forceUpdate()
     })}
   login=async()=>
