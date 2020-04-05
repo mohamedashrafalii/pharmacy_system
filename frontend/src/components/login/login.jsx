@@ -3,9 +3,9 @@ import axios from 'axios'
 import { Button } from 'reactstrap'
 import Navbar from '../navbar/navbar'
 import Medicine from '../medicine/medicine'
-import { Input } from '@material-ui/core'
+import { Input, FormControl, InputLabel } from '@material-ui/core'
 import { getWeekYearWithOptions } from 'date-fns/fp'
-
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { BrowserRouter, Route } from "react-router-dom";
 class Login extends Component {
 
@@ -64,27 +64,29 @@ else
   {
     return(
 
-    <div>
-
-      <p>Username</p>
-    <Input key="2" value={this.state.username} onChange={(e) => {
+    <fieldset style={{border:"solid black 3px"  , width:"18%" , marginLeft:"35%",marginTop:"10%" }}>
+      <legend style={{ marginLeft:"7%",fontSize:"100"}}>login</legend>
+     <AccountCircleIcon style={{ marginLeft:"7%",fontSize:"100"}} />
+      <InputLabel style={{ marginLeft:"7%",fontFamily:"ariel" }} >Username</InputLabel>
+    <Input style={{ marginLeft:"7%"}} key="2" value={this.state.username} onChange={(e) => {
    let { username } = this.state;
 
    username= e.target.value;
 
    this.setState({ username });
  }}/>
-    <p>Password</p>
-    <Input key="3" type="password" value={this.state.password} onChange={(e) => {
+    <InputLabel style={{ marginLeft:"7%" , fontFamily:"ariel"}}>Password</InputLabel>
+    <Input style={{ marginLeft:"7%"}} key="3" type="password" value={this.state.password} onChange={(e) => {
    let { password } = this.state;
 
    password= e.target.value;
 
    this.setState({ password });
  }}/>
-    <p></p>
-    <Button  onClick={()=>this.login()}>login</Button>
-    </div>
+<p></p>
+    <Button style={{ marginLeft:"7%"}} onClick={()=>this.login()}>login</Button>
+  <p></p>
+  </fieldset>
     )
 
 }}
