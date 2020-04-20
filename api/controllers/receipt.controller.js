@@ -3,6 +3,8 @@ const nodemailer = require("nodemailer");
 
 //Create 
 const Create = (req, res) => {
+
+  
     Receipt.create({ receipt: req.body.receipt })
     .then(createdReceipt => {
         res.json({
@@ -57,8 +59,9 @@ const SendMail =async (req,res)=> {
  var transporter = nodemailer.createTransport({
    service: 'gmail',
    auth: {
-     user: process.env.USER,
-     pass: process.env.PASS
+   
+     user: "receiptreceipt2020@gmail.com",
+     pass: "receipt2020A"
    }
  });
  

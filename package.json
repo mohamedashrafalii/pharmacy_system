@@ -26,7 +26,8 @@
     "nodemailer": "^6.4.6",
     "qrcode": "^1.4.4",
     "react-star-rating-component": "^1.4.1",
-    "simplesmtp": "^0.3.35"
+    "simplesmtp": "^0.3.35",
+    "unirest": "^0.6.0"
   },
   "devDependencies": {
     "nodemon": "^1.19.4"

@@ -1,4 +1,5 @@
 const Medicine = require("../../models/medicine.model");
+var unirest = require("unirest");
 //Create 
 const {addMedicineValidation,editMedicineValidation} = require("../../validations/medicineValidation")
 const Create =async (req, res) => {
@@ -91,7 +92,6 @@ update_medicine = async  (req, res) => {
     console.log(error)
   }
 }
-
 delete_medicine =  async (req, res) => {
   try{ 
   const id = req.params.id;
@@ -109,6 +109,7 @@ module.exports = {
     get_Allmedicines,
     update_medicine,
     delete_medicine,
+  
     ReadBarcode
   };
   
