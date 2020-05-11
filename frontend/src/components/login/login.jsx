@@ -23,8 +23,7 @@ class Login extends Component {
       const x=response.data.data[0].type
 
       this.setState({type:x})
-      console.log(x)
-      console.log(this.state.type)
+
       localStorage.setItem("type",x)
       window.location.href='https://pharmacystem.herokuapp.com/main/'+x
 
