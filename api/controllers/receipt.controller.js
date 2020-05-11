@@ -66,7 +66,7 @@ const SendMail =async (req,res)=> {
  });
  
  var mailOptions = {
-   from: '"RECEIPT FREE 🧾" <yourreceipt7@gmail.com>',
+   from: '"PHARMACYSTEM 🧾" <receiptreceipt2020@gmail.com>',
    to:req.body.mail,
    subject: 'Your Receipt',
    text: req.body.mailBody
