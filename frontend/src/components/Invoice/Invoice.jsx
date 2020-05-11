@@ -22,7 +22,6 @@ class Invoice extends Component {
     qrCODE:null,
     id: '',
     discountRate: 0.0,
-    payed:false,
      medicine:
     {  id: '', // react-beautiful-dnd unique key
     barcodeNumber:'',
@@ -122,9 +121,7 @@ class Invoice extends Component {
 
 
   handlePayButtonClick = async event => {
-    if(this.state.payed===true)
-    {alert("Make a new receipt first!")}
-    else{
+
     await axios
       .post(
         'https://pharma-system.herokuapp.com/api/receipts/create',
@@ -161,25 +158,34 @@ class Invoice extends Component {
   if(quantitiesChecker)
   {
     let showInv=true;
+  for(let i=0;i<this.state.lineItems.length;i++)
+  {
 
+  let oldMedicine=""
+
+  let quantitytmp=this.state.lineItems[i].quantity;
+
+  await axios.get("https://pharma-system.herokuapp.com/api/medicines/read/"+ this.state.lineItems[i].id,{headers: { authToken : this.props.value }})
+  .then((res)=>{oldMedicine=res.data.data})
 
   const body={
-    quantity:oldMedicine.quantity-quantitytmp>=0?oldMedicine.quantity-quantitytmp:0}
+    quantity:oldMedicine.quantity-quantitytmp}
     await axios.put("https://pharma-system.herokuapp.com/api/medicines/update/"+ this.state.lineItems[i].id,body,{headers: { authToken : this.props.value }})
+  }
 
-  this.setState({
+  if(showInv){
+      this.setState({
         flag:
           'https://pharmacystem.herokuapp.com/receipt/' +
           this.state.id +
           '/' +
           this.formatCurrency(this.calcGrandTotal()),
         show: true,
-        mailReady:true,
-        payed:true
+        mailReady:true
       })
     }
-  }}
-
+  }
+}
 
   handleNewReceiptClick = event => {
     event.preventDefault()
@@ -187,7 +193,6 @@ class Invoice extends Component {
     mailReady:false,
     mail: '',
     flag: '',
-    payed:false,
     show: false,
     qr: '',
     qrCODE:null,
