@@ -37,7 +37,8 @@ class Invoice extends Component {
         name: '',
         description: '',
         quantity: '',
-        price: ''
+        price: '',
+        barCodeNumber:''
       }
     ]
   }
@@ -65,7 +66,8 @@ class Invoice extends Component {
           name: this.state.medicine.name,//this.setState.medicine.name,
           description:this.state.medicine.description, //this.medicine.description,
           quantity: 1,
-          price:this.state.medicine.price//this.medicine.price
+          price:this.state.medicine.price,//this.medicine.price
+          barCodeNumber:this.state.medicine.barcodeNumber
         }
       ])
     })
@@ -114,6 +116,7 @@ class Invoice extends Component {
     let norep=true
     for(let i=0;i<this.state.lineItems.length;i++)
     {
+      console.log(this.state.lineItems[i].barcodeNumber+" "+this.state.barcodeNumber )
     if(this.state.lineItems[i].barcodeNumber===this.state.barcodeNumber)
     {norep=false
      break

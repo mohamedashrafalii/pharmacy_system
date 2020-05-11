@@ -70,7 +70,7 @@ export default function NavTabs(props) {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  console.log(props.value)
+
   if(props.value&&props.type===props.match.params.type)
 {
   return (
