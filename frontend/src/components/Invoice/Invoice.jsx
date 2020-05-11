@@ -111,7 +111,8 @@ class Invoice extends Component {
   }
 
   handleScan = async () =>{
-      if(this.state.lineItems.find({barcodeNumber:this.state.barcodeNumber}))
+      const rep = this.state.lineItems.find({barcodeNumber:this.state.barcodeNumber})
+      if(rep.length>0)
       alert("Medicine has been scanned before it is better to increase the quantity instead.")
       else
       this.getMedicineBYBarcode(this.state.barcodeNumber);
