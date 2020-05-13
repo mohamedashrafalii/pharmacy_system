@@ -180,8 +180,7 @@ class Invoice extends Component {
 
   await axios.get("https://pharma-system.herokuapp.com/api/medicines/read/"+ this.state.lineItems[i].id,{headers: { authToken : this.props.value }})
   .then((res)=>{oldMedicine=res.data.data})
-    alert(oldMedicine.quantity+" "+quantitytmp)
-  const body={
+   const body={
     quantity:oldMedicine.quantity-quantitytmp}
 
     await axios.put("https://pharma-system.herokuapp.com/api/medicines/update/"+ this.state.lineItems[i].id,body,{headers: { authToken : this.props.value }})
