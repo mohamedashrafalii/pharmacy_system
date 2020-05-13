@@ -19,6 +19,7 @@ class Invoice extends Component {
     flag: '',
     show: false,
     qr: '',
+
     qrCODE:null,
     id: '',
     discountRate: 0.0,
@@ -67,7 +68,7 @@ class Invoice extends Component {
           description:this.state.medicine.description, //this.medicine.description,
           quantity: 1,
           price:this.state.medicine.price,//this.medicine.price
-          barCodeNumber:this.state.medicine.barcodeNumber
+          barCodeNumber:this.state.barcodeNumber
         }
       ])
     })
@@ -116,8 +117,7 @@ class Invoice extends Component {
     let norep=true
     for(let i=0;i<this.state.lineItems.length;i++)
     {
-      console.log(this.state.lineItems[i].barcodeNumber+" "+this.state.barcodeNumber )
-    if(this.state.lineItems[i].barcodeNumber===this.state.barcodeNumber)
+    if(this.state.lineItems[i].barCodeNumber===this.state.barcodeNumber)
     {norep=false
      break
     }
@@ -133,6 +133,7 @@ class Invoice extends Component {
 
 
   handlePayButtonClick = async event => {
+
 
     await axios
       .post(
@@ -179,9 +180,10 @@ class Invoice extends Component {
 
   await axios.get("https://pharma-system.herokuapp.com/api/medicines/read/"+ this.state.lineItems[i].id,{headers: { authToken : this.props.value }})
   .then((res)=>{oldMedicine=res.data.data})
-
+    alert(oldMedicine.quantity+" "+quantitytmp)
   const body={
     quantity:oldMedicine.quantity-quantitytmp}
+
     await axios.put("https://pharma-system.herokuapp.com/api/medicines/update/"+ this.state.lineItems[i].id,body,{headers: { authToken : this.props.value }})
   }
 
@@ -197,7 +199,9 @@ class Invoice extends Component {
       })
     }
   }
+
 }
+
 
   handleNewReceiptClick = event => {
     event.preventDefault()
@@ -209,6 +213,7 @@ class Invoice extends Component {
     qr: '',
     qrCODE:null,
     id: '',
+
     discountRate: 0.0,
      medicine:
     {  id: '', // react-beautiful-dnd unique key

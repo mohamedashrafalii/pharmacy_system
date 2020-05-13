@@ -18,14 +18,14 @@ class Login extends Component {
   }
   getUserType=async(username)=>
   {
-     await axios.get( "https://pharma-system.herokuapp.com/api/users/"+username,{headers: { authToken :this.state.token }}
+     await axios.get( "http://localhost:5000/api/users/"+username,{headers: { authToken :this.state.token }}
     ).then((response) => {
       const x=response.data.data[0].type
 
       this.setState({type:x})
 
       localStorage.setItem("type",x)
-      window.location.href='https://pharmacystem.herokuapp.com/main/'+x
+      window.location.href='http://localhost:3000/main/'+x
 
        this.forceUpdate()
     })}
@@ -33,7 +33,7 @@ class Login extends Component {
   {
     const body= {"username":this.state.username,"password":this.state.password}
     await axios
-    .post("https://pharma-system.herokuapp.com/api/auth/login",body)
+    .post("http://localhost:5000/api/auth/login",body)
     .then(res=>{this.setState({token:res.data})
 if(res.data==="Wrong username or password!")
 alert("Wrong username or password!")
