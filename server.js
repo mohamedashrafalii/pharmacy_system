@@ -4,13 +4,12 @@ const cors = require("cors");
 const path = require("path");
 const app = express();
 const config = require("./config/keys.js");
-const dotenv = require("dotenv");
-const { mongoURI } = require("./config/keys.js");
+const dotenv = require("dotenv")
 
 dotenv.config()
 // Connect to Mongo
 mongoose
-  .connect(config.mongoURI, {
+  .connect(process.env.DB_CONNECTION, {
     useNewUrlParser: true,
     useFindAndModify: false,
     useCreateIndex: true,
