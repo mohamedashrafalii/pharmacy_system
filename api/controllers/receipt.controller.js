@@ -60,8 +60,8 @@ const SendMail =async (req,res)=> {
    service: 'gmail',
    auth: {
    
-     user: "receiptreceipt2020@gmail.com",
-     pass: "receipt2020A"
+     user: process.env.USER,
+     pass: process.env.PASS
    }
  });
  
@@ -74,6 +74,7 @@ const SendMail =async (req,res)=> {
  
  transporter.sendMail(mailOptions, function(error, info){
    if (error) {
+     
     return res.status(400).send(error)
    } else {
     return res.send('Email sent: ' + info.response);

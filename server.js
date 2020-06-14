@@ -9,7 +9,7 @@ const dotenv = require("dotenv")
 dotenv.config()
 // Connect to Mongo
 mongoose
-  .connect(process.env.DB_CONNECTION, {
+  .connect(config.mongoURI, {
     useNewUrlParser: true,
     useFindAndModify: false,
     useCreateIndex: true,
