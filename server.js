@@ -9,7 +9,7 @@ const dotenv = require("dotenv")
 dotenv.config()
 // Connect to Mongo
 mongoose
-  .connect(process.env.DB_CONNECTION, {
+  .connect("mongodb+srv://mohamedashrafalii:ehyabnA1@cluster0-vdzuk.mongodb.net/test?retryWrites=true&w=majority", {
     useNewUrlParser: true,
     useFindAndModify: false,
     useCreateIndex: true,
