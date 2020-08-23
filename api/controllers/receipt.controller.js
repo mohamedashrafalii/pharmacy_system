@@ -60,8 +60,8 @@ const SendMail =async (req,res)=> {
    service: 'gmail',
    auth: {
    
-     user: "yourreceipt7@gmail.com",
-     pass: "receiptA1@"
+     user: "receiptreceipt2020@gmail.com",
+     pass: "receipt2020A"
    }
  });
  
