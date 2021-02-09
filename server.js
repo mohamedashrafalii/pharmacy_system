@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require("path");
 const app = express();
-const config = require("./config/keys.js");
+
 const dotenv = require("dotenv")
 
 dotenv.config()
@@ -44,5 +44,5 @@ app.use((req, res) =>
   res.status(404).send(`<h1>Can not find what you're looking for</h1>`)
 );
 // Port
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 8080;
 app.listen(port, () => console.log(`Server started on port ${port}`));

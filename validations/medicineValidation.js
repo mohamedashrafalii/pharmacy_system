@@ -2,7 +2,7 @@ const Joi = require('joi')
 const addMedicineValidation = (data) =>{
     const schema = 
     {   
-    barcodeNumber:Joi.number().positive().required(),
+    barcodeNumber:Joi.number().positive(),
     name:Joi.string().min(1).max(100).required(),
     description:Joi.string().max(1000),
     price:Joi.number().positive().required(),
