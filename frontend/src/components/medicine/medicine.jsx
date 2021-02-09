@@ -1,19 +1,21 @@
-import React, { Component } from 'react'
-import axios from 'axios'
-import uuidv4 from 'uuid/v4'
-import {  Input, FormGroup, Label, Modal, ModalHeader, ModalBody, ModalFooter, Table, Button ,Alert} from 'reactstrap';
-import { log } from 'util';
-import 'date-fns';
+import React, { Component } from "react"
+import axios from "axios"
+import uuidv4 from "uuid/v4"
+import {  Input, FormGroup, Label, Modal, ModalHeader, ModalBody, ModalFooter, Table, Button ,Alert} from "reactstrap";
+import { log } from "util";
+import "date-fns";
 
-import Grid from '@material-ui/core/Grid';
-import DateFnsUtils from '@date-io/date-fns';
+import Grid from "@material-ui/core/Grid";
+import DateFnsUtils from "@date-io/date-fns";
 import {
   MuiPickersUtilsProvider,
 
   KeyboardDatePicker,
-} from '@material-ui/pickers';
-import { isThisQuarter } from 'date-fns';
-import { MdBorderRight } from 'react-icons/md';
+} from "@material-ui/pickers";
+import { isThisQuarter } from "date-fns";
+import { MdBorderRight } from "react-icons/md";
+import staticVariables from "../statics.json"
+
 class Medicine extends Component {
 
   state={
@@ -21,38 +23,38 @@ class Medicine extends Component {
     medicines:[],
     quantities:[],
     quantity:{
-      medicineName:'',
+      medicineName:"",
       quantity:0
     },
     medicine:
       {
         id: uuidv4(), // react-beautiful-dnd unique key
-        barcodeNumber:'',
-        name: '',
-        description: '',
-        price: '',
-        activeIngredients:'',
-        date:'',
+        barcodeNumber:"",
+        name: "",
+        description: "",
+        price: "",
+        activeIngredients:"",
+        date:"",
         quantity:""
       },
     newMedicine:{
-      barcodeNumber:'',
-      name: '',
-      description: '',
-      price: '',
-      activeIngredients:'',
-      date:'',
+      barcodeNumber:"",
+      name: "",
+      description: "",
+      price: "",
+      activeIngredients:"",
+      date:"",
       quantity:""
 
     },
     editMedicineData: {
-      id:'',
-      barcodeNumber:'',
-      name: '',
-      description: '',
-      price: '',
-      activeIngredients:'',
-      date:'',
+      id:"",
+      barcodeNumber:"",
+      name: "",
+      description: "",
+      price: "",
+      activeIngredients:"",
+      date:"",
       quantity:""
     },
     newMedicineModal: false,
@@ -73,14 +75,14 @@ class Medicine extends Component {
   getMedicines = async  ()=> {
 
     const res = await axios.get(
-      "https://pharma-system.herokuapp.com/api/medicines/read",{headers: { authToken : this.props.value }}
+      staticVariables.backendUrl+"/medicines/read",{headers: { authToken : this.props.value }}
       );
     this.setState({ medicines: res.data.data });
 
   };
   deleteMedicine=async(id)=> {
 
-    await axios.delete('https://pharma-system.herokuapp.com/api/medicines/delete/' + id,{headers: { authToken : this.props.value }})
+    await axios.delete(staticVariables.backendUrl+"/medicines/delete/" + id,{headers: { authToken : this.props.value }})
     .then((response) => {
 
      this.getMedicines()
@@ -92,7 +94,7 @@ class Medicine extends Component {
   addMedicine=async()=>{
   await axios
   .post(
-    'https://pharma-system.herokuapp.com/api/medicines/create/',
+    staticVariables.backendUrl+"/medicines/create/",
     this.state.newMedicine,{headers: { authToken : this.props.value }}
   )
   .then((response) => {
@@ -102,13 +104,13 @@ class Medicine extends Component {
     this.getMedicines()
 
     this.setState({ medicines, newMedicineModal: false, newMedicine: {
-       barcodeNumber:'',
-       name: '',
-       description: '',
-       price: '',
-       activeIngredients:'',
-       date:'',
-       quantity:''
+       barcodeNumber:"",
+       name: "",
+       description: "",
+       price: "",
+       activeIngredients:"",
+       date:"",
+       quantity:""
   }}
     )
   })
@@ -124,7 +126,7 @@ class Medicine extends Component {
        description  , name , price,date,activeIngredients,quantity} = this.state.editMedicineData;
       try{
 
-         await axios.put('https://pharma-system.herokuapp.com/api/medicines/update/' + this.state.editMedicineData.id, {
+         await axios.put(staticVariables.backendUrl+"/medicines/update/" + this.state.editMedicineData.id, {
 
         barcodeNumber,name,description,price,date,activeIngredients,quantity
       },{headers: { authToken : this.props.value }})
@@ -133,9 +135,9 @@ class Medicine extends Component {
       return alert(response.data)
           this.getMedicines()
         this.setState({
-          editMedicineModal: false, editRequestData: { id: '',
-          barcodeNumber:'',description:"" ,name:'',price:'',activeIngredients:'',
-          date:'',quantity:""}
+          editMedicineModal: false, editRequestData: { id: "",
+          barcodeNumber:"",description:"" ,name:"",price:"",activeIngredients:"",
+          date:"",quantity:""}
         })})}
 
 
@@ -174,8 +176,8 @@ render=()=>{
 
            <td style={{color:"#000"}}>
        <Button color="success" size="sm" className="mr-2" onClick={()=>this.editMedicine(
-         medicine['_id'])}>Edit</Button>
-       <Button color="danger" size="sm" onClick={()=>this.deleteMedicine(medicine['_id'])}>Delete</Button>
+         medicine["_id"])}>Edit</Button>
+       <Button color="danger" size="sm" onClick={()=>this.deleteMedicine(medicine["_id"])}>Delete</Button>
      </td>
 
 
@@ -283,7 +285,7 @@ render=()=>{
 
           }}
           KeyboardButtonProps={{
-            'aria-label': 'change date',
+            "aria-label": "change date",
           }}
         />
 
@@ -398,7 +400,7 @@ render=()=>{
 
           }}
           KeyboardButtonProps={{
-            'aria-label': 'change date',
+            "aria-label": "change date",
           }}
         />
 
@@ -409,7 +411,7 @@ render=()=>{
 
    </ModalBody>
    <ModalFooter>
-     <Button color="primary" onClick={()=>this.updateMedicine()}>Update Medicine</Button>{' '}
+     <Button color="primary" onClick={()=>this.updateMedicine()}>Update Medicine</Button>{" "}
      <Button color="secondary" onClick={this.toggleEditMedicineModal.bind(this)}>Cancel</Button>
    </ModalFooter>
  </Modal>

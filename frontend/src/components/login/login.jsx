@@ -7,6 +7,7 @@ import { Input, FormControl, InputLabel } from '@material-ui/core'
 import { getWeekYearWithOptions } from 'date-fns/fp'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { BrowserRouter, Route } from "react-router-dom";
+import staticVariables from "../statics.json"
 class Login extends Component {
 
   state={
@@ -18,14 +19,14 @@ class Login extends Component {
   }
   getUserType=async(username)=>
   {
-     await axios.get( "https://pharma-system.herokuapp.com/api/users/"+username,{headers: { authToken :this.state.token }}
+     await axios.get( staticVariables.backendUrl+"/users/"+username,{headers: { authToken :this.state.token }}
     ).then((response) => {
       const x=response.data.data[0].type
 
       this.setState({type:x})
 
       localStorage.setItem("type",x)
-      window.location.href='https://pharmacystem.herokuapp.com/main/'+x
+      window.location.href='http://localhost:3000/main/'+x
 
        this.forceUpdate()
     })}
@@ -33,7 +34,7 @@ class Login extends Component {
   {
     const body= {"username":this.state.username,"password":this.state.password}
     await axios
-    .post("https://pharma-system.herokuapp.com/api/auth/login",body)
+    .post(staticVariables.backendUrl+"/auth/login",body)
     .then(res=>{this.setState({token:res.data})
 if(res.data==="Wrong username or password!")
 alert("Wrong username or password!")

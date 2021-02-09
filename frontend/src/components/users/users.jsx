@@ -1,16 +1,16 @@
-import React, { Component } from 'react'
-import axios from 'axios'
-import uuidv4 from 'uuid/v4'
-import {  Input, FormGroup, Label, Modal, ModalHeader, ModalBody, ModalFooter, Table, Button ,Alert} from 'reactstrap';
+import React, { Component } from "react"
+import axios from "axios"
+import uuidv4 from "uuid/v4"
+import {  Input, FormGroup, Label, Modal, ModalHeader, ModalBody, ModalFooter, Table, Button ,Alert} from "reactstrap";
 
-import 'date-fns';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-
+import "date-fns";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormControl from "@material-ui/core/FormControl";
+import FormLabel from "@material-ui/core/FormLabel";
+import staticVariables from '../statics'
 class User extends Component {
 
   state={
@@ -42,14 +42,14 @@ class User extends Component {
     getUsers = async  ()=> {
 
     const res = await axios.get(
-      "https://pharma-system.herokuapp.com/api/users/",{headers: { authToken : this.props.value }}
+      staticVariables.backendUrl+"/users/",{headers: { authToken : this.props.value }}
       );
     this.setState({ Users: res.data.data });
 
   };
   deleteUser=async(id)=> {
 
-    await axios.delete('https://pharma-system.herokuapp.com/api/users/delete/' + id,{headers: { authToken : this.props.value }})
+    await axios.delete(staticVariables.backendUrl+"/users/delete/" + id,{headers: { authToken : this.props.value }})
     .then((response) => {
 
      this.getUsers()
@@ -62,7 +62,7 @@ class User extends Component {
   addUser=async()=>{
   await axios
   .post(
-    'https://pharma-system.herokuapp.com/api/users/addUser/',
+    staticVariables.backendUrl+"/users/addUser/",
     this.state.newUser,{headers: { authToken : this.props.value }}
   )
   .then((response) => {
@@ -74,7 +74,7 @@ class User extends Component {
 
     this.setState({ Users, newUserModal: false, newUser: {
 
-       name: '',
+       name: "",
       type:"",
       username:"",
       password:""
@@ -108,7 +108,7 @@ render=()=>{
 
 
            <td style={{color:"#000"}}>
-       <Button color="danger" size="sm" onClick={()=>this.deleteUser(user['_id'])}>Delete</Button>
+       <Button color="danger" size="sm" onClick={()=>this.deleteUser(user["_id"])}>Delete</Button>
      </td>
 
 

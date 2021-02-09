@@ -1,45 +1,48 @@
-import React, { Component } from 'react'
-import styles from './Invoice.module.scss'
-import axios from 'axios'
-import LineItems from './LineItems'
-import uuidv4 from 'uuid/v4'
-import {Button} from 'reactstrap'
-var QRCode = require('qrcode.react')
+import React, { Component } from "react"
+import styles from "./Invoice.module.scss"
+import axios from "axios"
+import LineItems from "./LineItems"
+import uuidv4 from "uuid/v4"
+import {Button} from "reactstrap"
+import staticVariables from "../statics.json"
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDIxYjg4N2I4NWJkOTAwMTU1ZDE4YWYiLCJpYXQiOjE2MTI4MjI2NjN9.pHABj2fBrE6rPwmRWgbEwzUx_xe0U4udKZQNigcvPPA"
+const storeId = "6021b887b85bd900155d18af"
+var QRCode = require("qrcode.react")
 
 class Invoice extends Component {
 
 
-  locale = 'en-US'
-  currency = 'USD'
+  locale = "en-US"
+  currency = "USD"
 
   state = {
     mailReady:false,
-    medicineId:'',
-    mail: '',
-    flag: '',
+    medicineId:"",
+    mail: "",
+    flag: "",
     show: false,
-    qr: '',
+    qr: undefined,
 
     qrCODE:null,
-    id: '',
+    id: "",
     discountRate: 0.0,
      medicine:
-    {  id: '', // react-beautiful-dnd unique key
-    barcodeNumber:'',
-    name: '',
-    description: '',
-    price:'',
+    {  id: "", // react-beautiful-dnd unique key
+    barcodeNumber:"",
+    name: "",
+    description: "",
+    price:"",
     quantity:""
     },
-    barcodeNumber:'',
+    barcodeNumber:"",
     lineItems: [
       {
         id: uuidv4(), // react-beautiful-dnd unique key
-        name: '',
-        description: '',
-        quantity: '',
-        price: '',
-        barCodeNumber:''
+        name: "",
+        description: "",
+        quantity: "",
+        price: "",
+        barcodeNumber:""
       }
     ]
   }
@@ -68,7 +71,7 @@ class Invoice extends Component {
           description:this.state.medicine.description, //this.medicine.description,
           quantity: 1,
           price:this.state.medicine.price,//this.medicine.price
-          barCodeNumber:this.state.barcodeNumber
+          barcodeNumber:this.state.barcodeNumber
         }
       ])
     })
@@ -96,7 +99,7 @@ class Invoice extends Component {
   {
     await axios
       .get(
-        'https://pharma-system.herokuapp.com/api/medicines/readBarcode/'+barcodeNumber,{headers: { authToken : this.props.value }}
+        staticVariables.backendUrl+"/medicines/readBarcode/"+barcodeNumber,{headers: { authToken : this.props.value }}
       )
       .then((res) => {
         let firstDate = new Date()
@@ -117,7 +120,7 @@ class Invoice extends Component {
     let norep=true
     for(let i=0;i<this.state.lineItems.length;i++)
     {
-    if(this.state.lineItems[i].barCodeNumber===this.state.barcodeNumber)
+    if(this.state.lineItems[i].barcodeNumber===this.state.barcodeNumber)
     {norep=false
      break
     }
@@ -137,11 +140,15 @@ class Invoice extends Component {
 
     await axios
       .post(
-        'https://pharma-system.herokuapp.com/api/receipts/create',
-        { receipt: this.state.lineItems },{headers: { authToken : this.props.value }}
+        staticVariables.BTRapi+"/receipts/create",
+        {  storeId:storeId,
+           receipt:{ vatPercentage:0, items:this.state.lineItems }},{headers: { authToken : token }}
       )
       .then(res => {
-        this.setState({ id: res.data.id })
+        this.setState({ id: res.data.id ,
+                        qr:res.data.qrCode})
+                        console.log(res.data.qrCode)
+                       
       })
       .catch(error => {
         alert(error.message)
@@ -157,7 +164,7 @@ class Invoice extends Component {
 
       let quantitytmp=this.state.lineItems[i].quantity;
 
-      await axios.get("https://pharma-system.herokuapp.com/api/medicines/read/"+ this.state.lineItems[i].id,{headers: { authToken : this.props.value }})
+      await axios.get(staticVariables.backendUrl+"/medicines/read/"+ this.state.lineItems[i].id,{headers: { authToken : this.props.value }})
       .then((res)=>{oldMedicine=res.data.data})
 
         if(quantitytmp>oldMedicine.quantity)
@@ -178,21 +185,17 @@ class Invoice extends Component {
 
   let quantitytmp=this.state.lineItems[i].quantity;
 
-  await axios.get("https://pharma-system.herokuapp.com/api/medicines/read/"+ this.state.lineItems[i].id,{headers: { authToken : this.props.value }})
+  await axios.get(staticVariables.backendUrl+"/medicines/read/"+ this.state.lineItems[i].id,{headers: { authToken : this.props.value }})
   .then((res)=>{oldMedicine=res.data.data})
    const body={
     quantity:oldMedicine.quantity-quantitytmp}
 
-    await axios.put("https://pharma-system.herokuapp.com/api/medicines/update/"+ this.state.lineItems[i].id,body,{headers: { authToken : this.props.value }})
+    await axios.put(staticVariables.backendUrl+"/medicines/update/"+ this.state.lineItems[i].id,body,{headers: { authToken : this.props.value }})
   }
 
   if(showInv){
       this.setState({
-        flag:
-          'https://pharmacystem.herokuapp.com/receipt/' +
-          this.state.id +
-          '/' +
-          this.formatCurrency(this.calcGrandTotal()),
+       
         show: true,
         mailReady:true
       })
@@ -204,24 +207,24 @@ class Invoice extends Component {
 
   handleNewReceiptClick = event => {
     event.preventDefault()
-    this.setState({ medicineId:'',
+    this.setState({ medicineId:"",
     mailReady:false,
-    mail: '',
-    flag: '',
+    mail: "",
+    flag: "",
     show: false,
-    qr: '',
+    qr: "",
     qrCODE:null,
-    id: '',
+    id: "",
 
     discountRate: 0.0,
      medicine:
-    {  id: '', // react-beautiful-dnd unique key
-    barcodeNumber:'',
-    name: '',
-    description: '',
-    price:''
+    {  id: "", // react-beautiful-dnd unique key
+    barcodeNumber:"",
+    name: "",
+    description: "",
+    price:""
     },
-    barcodeNumber:'',
+    barcodeNumber:"",
     lineItems: [
 
     ]})
@@ -230,7 +233,7 @@ class Invoice extends Component {
 
   formatCurrency = amount => {
     return new Intl.NumberFormat(this.locale, {
-      style: 'currency',
+      style: "currency",
       currency: this.currency,
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
@@ -258,9 +261,9 @@ class Invoice extends Component {
 
   goreceipt = () => {
     window.location.href =
-      'https://pharmacystem.herokuapp.com/receipt/' +
+      "https://pharmacystem.herokuapp.com/receipt/" +
       this.state.id +
-      '/' +
+      "/" +
       this.formatCurrency(this.calcGrandTotal())
   }
 
@@ -268,51 +271,12 @@ class Invoice extends Component {
     if(this.state.mail==="")
     alert("Enter a valid email adress!")
     else if(this.state.mailReady)
-    {const res = await axios.get(
-      'https://pharma-system.herokuapp.com/api/receipts/read/' +
-        this.state.id
-    )
-
-    let mailBody = ''
-    for (let i = 1; i <= res.data.data.length; i++) {
-      mailBody =
-        mailBody +
-        '\n' +
-        'Item #' +
-        i +
-        ':-' +
-        '\n' +
-        ' Description: ' +
-        res.data.data[i - 1].description +
-        '\n' +
-        ' Item Name: ' +
-        res.data.data[i - 1].name +
-        '\n' +
-        ' Price: ' +
-        this.formatCurrency(res.data.data[i - 1].price) +
-        '\n' +
-        ' Quantity: ' +
-        res.data.data[i - 1].quantity +
-        '\n' +
-        '-----------------------------------------'
-    }
-
-    mailBody +=
-      '\n' +
-      '-----------------------------------------' +
-      '\n' +
-      'Discount: ' +
-      this.formatCurrency(this.calcDiscountTotal()) +
-      '\n' +
-      'Total: ' +
-      this.formatCurrency(this.calcGrandTotal()) +
-      '\n'
-
-    axios
-      .post('https://pharma-system.herokuapp.com/api/receipts/sendMail', {
+    {
+    await axios
+      .post(staticVariables.BTRapi+"/receipts/sendMail", {
         mail: this.state.mail,
-        mailBody: mailBody
-      },{headers: { authToken : this.props.value }})
+        receiptId: this.state.id
+      },{headers: { authToken : token }})
       .then((res)=>{
 
         alert(res.data)
@@ -335,9 +299,7 @@ componentDidMount=()=>{this.setState({lineItems:[]})}
 
     // let qrCODE
     if(this.props.value){
-    if (this.state.show) {
-      this.state.qrCODE = <QRCode value={this.state.flag} />
-    } else this.state.qrCODE = null
+   
     return (
 <div>
       <div className={styles.invoice}>
@@ -345,7 +307,7 @@ componentDidMount=()=>{this.setState({lineItems:[]})}
         <div>
 
          <h1>Bar Code Number</h1>
-          <input name="barCodeNumber" className={styles.barcodeNumber } value={this.state.barcodeNumber} onChange={(e) => {
+          <input name="barcodeNumber" className={styles.barcodeNumber } value={this.state.barcodeNumber} onChange={(e) => {
    this.setState({ barcodeNumber : e.target.value })
  }} />
           <button id="scan"  className={styles.newreceipt} onClick={()=>this.handleScan()}>Scan</button>
@@ -423,7 +385,11 @@ componentDidMount=()=>{this.setState({lineItems:[]})}
         <div className={styles.footer}>
           <div className={styles.comments}>
             <h4>QR Code</h4>
-            {this.state.qrCODE}
+            {this.state.show&&this.state.qr&&
+            <div>
+             
+             <img style={{width:'100%'}}src={this.state.qr}></img>
+             </div>}
           </div>
           <div className={styles.closing}>
             <div>Thank-you for your business</div>

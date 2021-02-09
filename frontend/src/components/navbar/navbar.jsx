@@ -1,17 +1,17 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
-import Medicines from '../medicine/medicine.jsx'
-import Invoice from '../Invoice/Invoice.jsx'
-import Button from '@material-ui/core/Button'
-import User from '../users/users.jsx'
-import axios from 'axios'
-
+import React from "react";
+import PropTypes from "prop-types";
+import { makeStyles } from "@material-ui/core/styles";
+import AppBar from "@material-ui/core/AppBar";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
+import Medicines from "../medicine/medicine.jsx"
+import Invoice from "../Invoice/Invoice.jsx"
+import Button from "@material-ui/core/Button"
+import User from "../users/users.jsx"
+import axios from "axios"
+import staticVariables from "../statics.json"
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -38,7 +38,7 @@ TabPanel.propTypes = {
 function a11yProps(index) {
   return {
     id: `nav-tab-${index}`,
-    'aria-controls': `nav-tabpanel-${index}`,
+    "aria-controls": `nav-tabpanel-${index}`,
   };
 }
 
@@ -88,10 +88,10 @@ export default function NavTabs(props) {
           {props.match.params.type==="admin"&&
           <LinkTab label="Users" href="/" {...a11yProps(2)} />
           }
-          <button style={{background:"inherit",color:"white"}} onClick={async()=>{localStorage.removeItem('token')
-localStorage.removeItem('type')
-          await axios.get("https://pharma-system.herokuapp.com/api/auth/Logout")
-                          window.location.href='https://pharmacystem.herokuapp.com'
+          <button style={{background:"inherit",color:"white"}} onClick={async()=>{localStorage.removeItem("token")
+localStorage.removeItem("type")
+          await axios.get(staticVariables.backendUrl+"/auth/Logout")
+                          window.location.href="https://pharmacystem.herokuapp.com"
 
                         }}>LOGOUT</button>
          </Tabs>
