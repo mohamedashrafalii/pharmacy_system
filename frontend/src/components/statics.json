@@ -1,4 +1,5 @@
 {
     "backendUrl":"https://pharma-system.herokuapp.com/api",
-    "BTRapi":"https://btr-be.herokuapp.com/api"
+    "BTRapi":"https://btr-be.herokuapp.com/api",
+    "frontUrl":"https://pharmacystem.herokuapp.com/"
 }

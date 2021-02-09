@@ -26,7 +26,7 @@ class Login extends Component {
       this.setState({type:x})
 
       localStorage.setItem("type",x)
-      window.location.href='http://localhost:3000/main/'+x
+      window.location.href=staticVariables.frontUrl+'main/'+x
 
        this.forceUpdate()
     })}
