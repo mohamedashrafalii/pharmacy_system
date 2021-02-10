@@ -5,10 +5,12 @@ import LineItems from "./LineItems"
 import uuidv4 from "uuid/v4"
 import {Button} from "reactstrap"
 import staticVariables from "../statics.json"
+import {toast} from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDIxYjg4N2I4NWJkOTAwMTU1ZDE4YWYiLCJpYXQiOjE2MTI4MjI2NjN9.pHABj2fBrE6rPwmRWgbEwzUx_xe0U4udKZQNigcvPPA"
 const storeId = "6021b887b85bd900155d18af"
 var QRCode = require("qrcode.react")
-
+toast.configure()
 class Invoice extends Component {
 
 
@@ -25,7 +27,7 @@ class Invoice extends Component {
 
     qrCODE:null,
     id: "",
-    discountRate: 0.0,
+    
      medicine:
     {  id: "", // react-beautiful-dnd unique key
     barcodeNumber:"",
@@ -216,7 +218,7 @@ class Invoice extends Component {
     qrCODE:null,
     id: "",
 
-    discountRate: 0.0,
+   
      medicine:
     {  id: "", // react-beautiful-dnd unique key
     barcodeNumber:"",
@@ -240,9 +242,7 @@ class Invoice extends Component {
     }).format(amount)
   }
 
-  calcDiscountAmount = c => {
-    return c * (this.state.discountRate / 100)
-  }
+ 
 
   calcLineItemsTotal = () => {
     return this.state.lineItems.reduce(
@@ -251,12 +251,11 @@ class Invoice extends Component {
     )
   }
 
-  calcDiscountTotal = () => {
-    return this.calcLineItemsTotal() * (this.state.discountRate / 100)
-  }
+ 
 
   calcGrandTotal = () => {
-    return this.calcLineItemsTotal() - this.calcDiscountTotal()
+    return this.calcLineItemsTotal()
+
   }
 
   goreceipt = () => {
@@ -278,8 +277,8 @@ class Invoice extends Component {
         receiptId: this.state.id
       },{headers: { authToken : token }})
       .then((res)=>{
-
-        alert(res.data)
+        toast("sent successfully!",{type:'success'})
+        
       })
       .catch(error => {
         alert(error.message)
@@ -335,37 +334,12 @@ componentDidMount=()=>{this.setState({lineItems:[]})}
         />
 
         <div className={styles.totalContainer}>
+          
           <form>
             <div className={styles.valueTable}>
-              <div className={styles.row}>
-                <div className={styles.label}>Discount Rate (%)</div>
-                <div className={styles.value}>
-                  <input
-                    name="discountRate"
-                    type="number"
-                    step="0.01"
-                    value={this.state.discountRate}
-                    onChange={this.handleInvoiceChange}
-                    onFocus={this.handleFocusSelect}
-                  />
-                </div>
-              </div>
-            </div>
-          </form>
-          <form>
-            <div className={styles.valueTable}>
-              <div className={styles.row}>
-                <div className={styles.label}>Subtotal</div>
-                <div className={`${styles.value} ${styles.currency}`}>
-                  {this.formatCurrency(this.calcLineItemsTotal())}
-                </div>
-              </div>
-              <div className={styles.row}>
-                <div className={styles.label}>Discount ({this.state.discountRate}%)</div>
-                <div className={`${styles.value} ${styles.currency}`}>
-                  {this.formatCurrency(this.calcDiscountTotal())}
-                </div>
-              </div>
+            
+               
+             
               <div className={styles.row}>
                 <div className={styles.label}>Total Due</div>
                 <div className={`${styles.value} ${styles.currency}`}>
