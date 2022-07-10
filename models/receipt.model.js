@@ -5,15 +5,21 @@ const Schema = mongoose.Schema;
 //offer schema
 const receiptSchema = new Schema(
   {
-   
-    receipt: [JSON],
+   patientName:String,
+
+   paid:Number,
+
+   serviceType:{type: Schema.Types.ObjectId, ref: 'MainService'},
+
+   service:[{type: Schema.Types.ObjectId, ref: 'Service'}],
+
+   userName:String,
+
+   total:Number
   },
   {
     timestamps: true
   }
 );
-receiptSchema.index({
-  "$**": "text"
-});
 
 module.exports = Receipt = mongoose.model("Receipt", receiptSchema);

@@ -34,10 +34,20 @@ app.get("/", (req, res) => res.send(`<h1>Welcome to Beat the Receipt app</h1>`))
 // Use Routes
 
 
-app.use("/api/receipts",require("./api/routes/receipt.router"));
-app.use("/api/medicines",require("./api/routes/medicine.router"));
-app.use("/api/auth",require("./api/routes/auth.router"));
-app.use("/api/users",require("./api/routes/users.router"));
+ app.use("/api/fe2at-ornek",require("./api/routes/category.router"));
+ app.use("/api/departments",require("./api/routes/departments.router"));
+ app.use("/api/departmentsEmployees",require("./api/routes/departmentsEmployees.router"));
+ app.use("/api/invType",require("./api/routes/invType.router"));
+ app.use("/api/mainService",require("./api/routes/mainService.router"));
+ app.use("/api/patient",require("./api/routes/patient.router"));
+ app.use("/api/rates",require("./api/routes/rates.router"));
+ app.use("/api/receipt",require("./api/routes/receipt.router"));
+ app.use("/api/rotba",require("./api/routes/rotba.router"));
+ app.use("/api/service",require("./api/routes/service.router"));
+ app.use("/api/ticket",require("./api/routes/ticket.router"));
+ app.use("/api/years",require("./api/routes/years.router"));
+// app.use("/api/auth",require("./api/routes/auth.router"));
+// app.use("/api/users",require("./api/routes/users.router"));
 
 // Wrong path
 app.use((req, res) =>

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Controller = require("../controllers/common.controller");
-const Target = require("../../models/receipt.model");
+const Target = require("../../models/departmentsEmployees.model");
 const {
     Create,
     Read_by_id,
